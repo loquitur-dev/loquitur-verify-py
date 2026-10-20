@@ -1,0 +1,5 @@
+The bundle fails offline verification. The receipt cannot be cited as supporting the declared evidence and must not be accepted for listing, settlement, or any downstream operational use.
+
+The receipt's outer envelope has been altered. The envelope binds the receipt to the issuer signature and to the bundle context. A modified envelope means the issuer attestation cannot be tied to the current receipt content with cryptographic certainty. Reject the bundle. Require the issuer to regenerate the envelope and reissue the receipt and signature together.
+
+Reject the bundle. Require the issuer to address the failing condition and resubmit. Document the rejection in the audit trail.

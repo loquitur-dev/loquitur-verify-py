@@ -1,0 +1,7 @@
+Offline verification produced a FAIL verdict. At least one deterministic check rejected the bundle.
+
+Envelope-declared inner hashes do not match recomputed hashes. The envelope (env1) declares the SHA-256 of its inner P1 receipt and supporting artifacts. At least one of these inner-link hashes does not match the recomputed value. The envelope and its inner contents have drifted relative to each other; the envelope is no longer a faithful wrapper of the current bundle contents.
+
+Manifest content does not match manifest.sha256. The recomputed SHA-256 of manifest.json does not match the value stored in manifest.sha256. The manifest has been edited after the sidecar hash file was produced, or the sidecar hash is stale relative to the current manifest. The bundle's table of declared file hashes therefore cannot be trusted as authoritative.
+
+Resolve the flagged failures (in canonical order: integrity → coverage → freshness → conflict → policy) and regenerate the bundle before re-verification.

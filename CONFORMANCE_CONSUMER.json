@@ -1,0 +1,34 @@
+{
+  "adapter_path": "tools/conformance_adapter.py",
+  "authority": "loquitur-protocol-governance",
+  "canonical_artifact": {
+    "bytes": 7745810,
+    "name": "loquitur-conformance-bdbadee7f6144d08.zip",
+    "sha256": "bdbadee7f6144d087ec9df144dd17f1e3fd4d967dc11ee17b844bfaa043a069e"
+  },
+  "consumer_conformance_status": "no-known-nonconformance",
+  "consumption": "read-only",
+  "corpus_id": "loquitur-conformance-bdbadee7f6144d08",
+  "current_enforcement": "independent oracle execution with an exact blocking disagreement baseline; immutable release workspace execution is not implemented: the release-set verifier contains no such control",
+  "local_fixtures": "implementation-local-non-normative",
+  "non_claims": [
+    "does-not-close-all-drift",
+    "does-not-authenticate-trust-root",
+    "does-not-approve-sdk-publication",
+    "does-not-approve-release"
+  ],
+  "protocol_release_id": "loquitur-protocol-0.1.0",
+  "repository": "loquitur-verify-py",
+  "required_profiles": [
+    "canonical-json-v1",
+    "offline-verification-v1",
+    "registry-link-v1",
+    "trust-authorization-v1",
+    "registry-entry-signing-envelope-v2",
+    "cryptographic-capability-matrix-v0.1",
+    "independent-conformance-oracle-v1",
+    "registered-vocabularies-v1"
+  ],
+  "schema_version": "loquitur.conformance_consumer.v1",
+  "wire_semantic_change": false
+}

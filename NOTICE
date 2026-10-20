@@ -1,0 +1,28 @@
+loquitur-verify-py
+Copyright 2026 Andrea Venè
+
+This product includes software developed by Andrea Venè as part of the
+Loquitur protocol project.
+
+Licensed under either of
+
+- the Apache License, Version 2.0, in the LICENSE-APACHE file, or
+- the MIT License, in the LICENSE-MIT file,
+
+at your option (SPDX license expression: MIT OR Apache-2.0). This covers
+the code, the JSON documents, the test fixtures, the tools, the tests and
+every other file of this repository, except the third-party material below.
+
+Third-party material
+
+tests/vectors/ecdsa_secp256k1_sha256_p1363_test.json is a test-vector file
+of the Wycheproof project (https://github.com/C2SP/wycheproof), file
+testvectors_v1/ecdsa_secp256k1_sha256_p1363_test.json, retrieved on
+2026-07-02 and kept unmodified (SHA-256
+7a339efc7134fb2495cd32afdbd692e0f86427d3c24e9073f6a7d858bb8788d2, which
+tests/test_wycheproof_secp256k1.py checks). The Wycheproof project
+distributes it under the Apache License, Version 2.0, whose text is in the
+LICENSE-APACHE file. That file is licensed under the Apache License,
+Version 2.0 only; the MIT License option does not apply to it. The source
+distribution of this package does not include it, so that every file the
+package distributes is under MIT OR Apache-2.0.

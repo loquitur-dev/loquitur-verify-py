@@ -1,0 +1,14 @@
+# Byte-for-byte parity IS the product: manifests, sidecars and golden vectors commit to
+# the SHA-256 of file *bytes*, so a checkout that rewrites line endings changes the very
+# thing the protocol pins. With core.autocrlf=true and no .gitattributes, a fresh clone on
+# Windows fails the Wycheproof corpus integrity gate outright: the bytes it hashes are
+# not the bytes that were committed. Normalizing to LF makes the working tree identical on
+# every platform.
+* text=auto eol=lf
+
+# Never touched: any translation here corrupts the artifact.
+*.zip binary
+*.bin binary
+*.pdf binary
+*.png binary
+*.jpg binary

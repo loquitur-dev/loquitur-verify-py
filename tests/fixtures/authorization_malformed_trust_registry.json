@@ -1,0 +1,15 @@
+{
+  "effective_at": "2026-04-29T12:00:00Z",
+  "expires_at": "2026-05-29T12:00:00Z",
+  "issued_at": "2026-04-29T12:00:00Z",
+  "object_type": "trust_registry",
+  "registry_operator_id": "operator_loquitur_demo",
+  "registry_version": "0.1.0-demo",
+  "schema_version": "v1",
+  "signature": {
+    "algorithm": "secp256k1_ecdsa_sha256",
+    "key_id": "trust-registry-demo-key",
+    "signature": "demo-trust-registry-signature-placeholder-non-production"
+  },
+  "trust_registry_id": "tr_synthetic_demo_0001"
+}

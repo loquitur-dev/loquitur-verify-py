@@ -1,0 +1,5 @@
+Offline verification produced a PASS verdict. The bundle's manifest, P1 receipt, and envelope hashes recompute deterministically to their declared values.
+
+Bundle integrity verification completed without errors. The manifest, P1 receipt, and envelope hashes have been recomputed and match the values declared inside the bundle. Canonical input hashing succeeded under RFC 8785 (JCS). No tampering, truncation, or canonicalization drift was detected at the bundle integrity layer.
+
+No further integrity action is required at the offline layer. Coverage, freshness, conflict, and materiality remain to be evaluated by the policy engine where applicable.

@@ -1,0 +1,6 @@
+{
+  "bundle_filename": "tampered_canonical_input_bundle.zip",
+  "context": "offline_verification",
+  "description": "FAIL: canonical_input.json modified after receipt issuance.",
+  "scenario_id": "offline_03_tampered_canonical_input_fail"
+}

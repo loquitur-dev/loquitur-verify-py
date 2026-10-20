@@ -1,0 +1,7 @@
+The bundle fails offline verification. The receipt cannot be cited as supporting the declared evidence and must not be accepted for listing, settlement, or any downstream operational use.
+
+The envelope no longer corresponds to its inner receipt and evidence. The bundle is internally inconsistent: the envelope claims to wrap one set of contents, the actual contents are a different set. A receipt cited from this bundle has no defensible cryptographic support. Reject the bundle. Require the issuer to regenerate the entire bundle from clean source state. Do not attempt partial repair.
+
+Supporting evidence has been modified after the receipt was issued. The evidence file that the receipt commits to has been replaced or altered. Whatever the receipt claims about that evidence (extracted claims, freshness, conflict status) no longer corresponds to the current file. The bundle must not be cited as evidence of anything beyond the fact of tampering. Reject the bundle. Require the issuer to identify which file changed, restore the original or regenerate the bundle from clean source, and reissue the receipt.
+
+Reject the bundle. Require the issuer to address every failing condition listed above and resubmit. Document each rejection reason in the audit trail.

@@ -1,0 +1,33 @@
+{
+  "branch_id": "0.1.0",
+  "governance_change": true,
+  "inherited_guarantees": {
+    "lineage_end": "0.1.0",
+    "lineage_start": "initial",
+    "policy": "superset-no-regression"
+  },
+  "non_claims": [
+    "not-a-release-candidate",
+    "not-an-sdk-publication-approval",
+    "not-an-authenticated-trust-root",
+    "not-an-external-cryptographic-audit",
+    "not-a-production-key-custody-approval",
+    "not-a-deployment-approval",
+    "not-a-partner-readiness-claim",
+    "not-a-guarantee-of-consumer-conformance-outside-the-exercised-vectors"
+  ],
+  "parent_release_set_id": "loquitur-release-set-initial",
+  "release_manifest": {
+    "artifact": "release-set.json",
+    "owner": "loquitur-protocol-governance",
+    "verification": "release-set-verifier-v1",
+    "verification_profile_id": "loquitur.release_set_verifier.v1"
+  },
+  "release_set_id": "loquitur-release-set-0.1.0",
+  "repository": "loquitur-verify-py",
+  "repository_role": "python-reference-offline-verifier",
+  "schema_version": "loquitur.release_set_pointer.v3",
+  "semantic_change": false,
+  "status": "independent-conformance-oracle-active-no-known-consumer-disagreements",
+  "wire_semantic_change": false
+}

@@ -1,0 +1,11 @@
+{
+  "archive_member_lists": [],
+  "corpus_lock": null,
+  "forbidden_roots": [],
+  "needle_lists": [
+    "disclosure",
+    "private_perimeter"
+  ],
+  "reviewed": [],
+  "schema_version": "loquitur.public_boundary.v1"
+}

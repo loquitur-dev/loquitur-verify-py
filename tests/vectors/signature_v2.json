@@ -1,0 +1,114 @@
+{
+  "domain_prefix_ascii_escaped": "LOQUITUR\\u0000REGISTRY_ENTRY\\u0000SIGNATURE\\u0000V2\\u0000",
+  "domain_prefix_hex": "4c4f5155495455520052454749535452595f454e545259005349474e415455524500563200",
+  "expected": {
+    "tampered_status": "SIGNATURE_INVALID",
+    "valid_status": "VALID_SIGNATURE"
+  },
+  "payload_id": "registry_entry_signing_payload_v2",
+  "payload_version": 2,
+  "public_key_hex": "049dd6b8f8236d4cda3a1b8a533a2ba1b83c002939ed5ceb7804d69bf8022160b8f3d0dd9e830076203a82f38c668ac93edbd47cb8cba7a311f3c9025262806efd",
+  "schema_version": "loquitur.registry_entry_signature_vector.v2",
+  "signature_algorithm": "secp256k1_ecdsa_sha256",
+  "signature_compact_hex": "c68706f9e3609049e33e45b0ed0b5afe466e9b346c7214e4b098d2b019ac33160987f2b28623253eafcba1e28cc136ee2a1df84674634a4c952e1cb40425ec05",
+  "signed_entry": {
+    "anchor": null,
+    "anchored_at": null,
+    "asset_type": "fund_nav",
+    "disclosure_profile": "issuer_controlled_bundle",
+    "effective_at": "2026-04-29T00:00:00Z",
+    "issued_at": "2026-04-29T12:00:00Z",
+    "issuer_id": "issuer_synthetic_demo",
+    "issuer_key_id": "demo-key-2",
+    "manifest_hash": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+    "object_type": "registry_entry",
+    "policy_id": "loquitur.fund_nav.v1",
+    "policy_version": "1.0.0",
+    "privacy_classification": "public_commitment",
+    "reason_code_catalog_version": "loquitur.reason_codes.v1",
+    "reason_codes": [
+      "CONFLICTING_EVIDENCE_DETECTED"
+    ],
+    "receipt_hash": "sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+    "receipt_id": "vr_synthetic_demo_0001",
+    "registry_entry_id": "reg_synthetic_demo_0001",
+    "schema_version": "v1",
+    "signature": {
+      "algorithm": "secp256k1_ecdsa_sha256",
+      "key_id": "demo-key-2",
+      "payload_id": "registry_entry_signing_payload_v2",
+      "payload_version": 2,
+      "signature": "c68706f9e3609049e33e45b0ed0b5afe466e9b346c7214e4b098d2b019ac33160987f2b28623253eafcba1e28cc136ee2a1df84674634a4c952e1cb40425ec05"
+    },
+    "subject_ref_hash": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "verdict": "REVIEW",
+    "workflow": "fund_nav_update"
+  },
+  "signing_envelope": {
+    "domain": "org.loquitur.protocol.registry-entry-signature",
+    "envelope_schema": "loquitur.signing_envelope.v2",
+    "envelope_version": 2,
+    "payload": {
+      "asset_type": "fund_nav",
+      "disclosure_profile": "issuer_controlled_bundle",
+      "effective_at": "2026-04-29T00:00:00Z",
+      "issued_at": "2026-04-29T12:00:00Z",
+      "issuer_id": "issuer_synthetic_demo",
+      "issuer_key_id": "demo-key-2",
+      "manifest_hash": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+      "object_type": "registry_entry",
+      "policy_id": "loquitur.fund_nav.v1",
+      "policy_version": "1.0.0",
+      "privacy_classification": "public_commitment",
+      "reason_code_catalog_version": "loquitur.reason_codes.v1",
+      "reason_codes": [
+        "CONFLICTING_EVIDENCE_DETECTED"
+      ],
+      "receipt_hash": "sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+      "receipt_id": "vr_synthetic_demo_0001",
+      "registry_entry_id": "reg_synthetic_demo_0001",
+      "schema_version": "v1",
+      "subject_ref_hash": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "verdict": "REVIEW",
+      "workflow": "fund_nav_update"
+    },
+    "payload_id": "registry_entry_signing_payload_v2",
+    "payload_schema": "loquitur.registry_entry.v1",
+    "signature_algorithm": "secp256k1_ecdsa_sha256"
+  },
+  "signing_message_hex": "4c4f5155495455520052454749535452595f454e545259005349474e4154555245005632007b22646f6d61696e223a226f72672e6c6f7175697475722e70726f746f636f6c2e72656769737472792d656e7472792d7369676e6174757265222c22656e76656c6f70655f736368656d61223a226c6f7175697475722e7369676e696e675f656e76656c6f70652e7632222c22656e76656c6f70655f76657273696f6e223a322c227061796c6f6164223a7b2261737365745f74797065223a2266756e645f6e6176222c22646973636c6f737572655f70726f66696c65223a226973737565725f636f6e74726f6c6c65645f62756e646c65222c226566666563746976655f6174223a22323032362d30342d32395430303a30303a30305a222c226973737565645f6174223a22323032362d30342d32395431323a30303a30305a222c226973737565725f6964223a226973737565725f73796e7468657469635f64656d6f222c226973737565725f6b65795f6964223a2264656d6f2d6b65792d32222c226d616e69666573745f68617368223a227368613235363a62626262626262626262626262626262626262626262626262626262626262626262626262626262626262626262626262626262626262626262626262626262222c226f626a6563745f74797065223a2272656769737472795f656e747279222c22706f6c6963795f6964223a226c6f7175697475722e66756e645f6e61762e7631222c22706f6c6963795f76657273696f6e223a22312e302e30222c22707269766163795f636c617373696669636174696f6e223a227075626c69635f636f6d6d69746d656e74222c22726561736f6e5f636f64655f636174616c6f675f76657273696f6e223a226c6f7175697475722e726561736f6e5f636f6465732e7631222c22726561736f6e5f636f646573223a5b22434f4e464c494354494e475f45564944454e43455f4445544543544544225d2c22726563656970745f68617368223a227368613235363a63636363636363636363636363636363636363636363636363636363636363636363636363636363636363636363636363636363636363636363636363636363222c22726563656970745f6964223a2276725f73796e7468657469635f64656d6f5f30303031222c2272656769737472795f656e7472795f6964223a227265675f73796e7468657469635f64656d6f5f30303031222c22736368656d615f76657273696f6e223a227631222c227375626a6563745f7265665f68617368223a227368613235363a61616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161222c2276657264696374223a22524556494557222c22776f726b666c6f77223a2266756e645f6e61765f757064617465227d2c227061796c6f61645f6964223a2272656769737472795f656e7472795f7369676e696e675f7061796c6f61645f7632222c227061796c6f61645f736368656d61223a226c6f7175697475722e72656769737472795f656e7472792e7631222c227369676e61747572655f616c676f726974686d223a22736563703235366b315f65636473615f736861323536227d",
+  "signing_payload_sha256": "sha256:df4606928cb2833fff272cbc80b7c95b462ae3ab9daf00714b3df5bfc4547e46",
+  "tampered_entry": {
+    "anchor": null,
+    "anchored_at": null,
+    "asset_type": "fund_nav",
+    "disclosure_profile": "issuer_controlled_bundle",
+    "effective_at": "2026-04-29T00:00:00Z",
+    "issued_at": "2026-04-29T12:00:00Z",
+    "issuer_id": "issuer_synthetic_demo",
+    "issuer_key_id": "demo-key-2",
+    "manifest_hash": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbc",
+    "object_type": "registry_entry",
+    "policy_id": "loquitur.fund_nav.v1",
+    "policy_version": "1.0.0",
+    "privacy_classification": "public_commitment",
+    "reason_code_catalog_version": "loquitur.reason_codes.v1",
+    "reason_codes": [
+      "CONFLICTING_EVIDENCE_DETECTED"
+    ],
+    "receipt_hash": "sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+    "receipt_id": "vr_synthetic_demo_0001",
+    "registry_entry_id": "reg_synthetic_demo_0001",
+    "schema_version": "v1",
+    "signature": {
+      "algorithm": "secp256k1_ecdsa_sha256",
+      "key_id": "demo-key-2",
+      "payload_id": "registry_entry_signing_payload_v2",
+      "payload_version": 2,
+      "signature": "c68706f9e3609049e33e45b0ed0b5afe466e9b346c7214e4b098d2b019ac33160987f2b28623253eafcba1e28cc136ee2a1df84674634a4c952e1cb40425ec05"
+    },
+    "subject_ref_hash": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "verdict": "REVIEW",
+    "workflow": "fund_nav_update"
+  }
+}

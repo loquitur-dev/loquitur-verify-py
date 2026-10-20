@@ -1,0 +1,1 @@
+The verification record is rejected and cannot be relied upon. The wrapper and contents of this record do not match each other. The record is internally broken and is rejected. The list of supporting documents in this record has been altered after the record was created. The record is rejected. The issuer must produce a corrected version addressing each flagged condition.

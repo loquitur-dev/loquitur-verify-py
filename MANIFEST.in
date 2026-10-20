@@ -1,0 +1,63 @@
+include README.md
+include LICENSE-APACHE
+include LICENSE-MIT
+include NOTICE
+# Root artifacts the shipped suite reads, for the same reason `docs` is grafted below:
+# GOVERNANCE.md is what tools/check_public_boundary.py asks every tree who maintains it,
+# CONFORMANCE_CONSUMER.json is the pin tests/test_conformance_consumer_prose.py holds the
+# README to, and CONTRIBUTING.md is where tests/test_readme_quickstart.py finds the link to
+# docs/maintainers/, CHANGELOG.md is where tools/release_checks.py finds the section of the
+# version, and CODE_OF_CONDUCT.md and SECURITY.md are the two documents
+# tests/test_reporting_channels.py holds to the same reporting channels. Without them the shipped tests that read them fail on extraction. The
+# rule is one rule: the source distribution ships every root artifact its own tests and tools
+# read, and tests/test_release_checks_0_1_0.py fails when one of them is added without this
+# file following.
+include CHANGELOG.md
+include CONFORMANCE_CONSUMER.json
+include CODE_OF_CONDUCT.md
+include CONTRIBUTING.md
+include GOVERNANCE.md
+include SECURITY.md
+# The sdist carries the proofs; the wheel does not change.
+#
+# MANIFEST.in governs the source distribution only: the wheel is the same either way, byte
+# for byte the artifact `local_wheel_gate.py --check-reproducible` prints a
+# digest for, so nobody who installs the wheel pays for this. The proofs reach only someone
+# who deliberately asked for the source, which is exactly a reviewer doing diligence, and
+# this package's whole thesis is that a claim should be checkable by the recipient rather than
+# taken on trust. This comment gives no size or member count for either artifact: the
+# wheel's would go stale at the next change to a shipped source file, and the source
+# distribution's cannot be recorded in a file the source distribution ships without the
+# record moving what it records. The gate prints the wheel's digest on every run.
+#
+# Measured, not assumed, in the one configuration the gate runs: `local_wheel_gate.py
+# --check-dist` extracts the sdist into a fresh virtual environment holding the sdist and
+# pytest, with no sibling repository beside it and LOQUITUR_REQUIRE_SIBLINGS removed from the
+# child environment rather than left to whoever runs the gate. There it
+# passes with none failed. Most skips are the narrative tests and the
+# cryptography-backed references, which need the optional loquitur-schemas extra, and the rest
+# need a sibling checkout. The counts move as tests are added and the gate prints the current
+# ones on every run, so none is recorded here: nothing checks a figure in a comment.
+# `docs` is grafted because tests read docs/maintainers/build-checks.md; without it the
+# shipped suite fails on extraction, which would be worse than shipping no tests at all.
+graft tests
+graft tools
+graft docs
+# The one third-party file of the repository stays out of the source distribution. NOTICE: it is
+# under the Apache License, Version 2.0 only, so a distribution carrying it would not be
+# `MIT OR Apache-2.0` as its License-Expression declares (PEP 639: the expression covers every
+# file the distribution holds). The wheel never carried it. In an extracted sdist the tests that
+# read it skip and say why; in the repository its absence fails them.
+exclude tests/vectors/ecdsa_secp256k1_sha256_p1363_test.json
+# global-exclude, not recursive-exclude. `recursive-exclude __pycache__ *` matches a
+# directory of that name at the top level and nothing nested, so grafting tests would ship
+# .pyc files compiled by one machine into an artifact a package index keeps forever.
+# global-exclude applies at any depth.
+global-exclude *.py[cod]
+global-exclude __pycache__/*
+prune .pytest_cache
+prune .ruff_cache
+prune .mypy_cache
+prune build
+prune dist
+prune htmlcov

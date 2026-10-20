@@ -1,0 +1,5 @@
+Offline verification produced a FAIL verdict. At least one deterministic check rejected the bundle.
+
+Canonical input hash does not match the P1 input hash. The SHA-256 of the canonicalized canonical_input.json does not match the input_hash declared inside p1.json. Either canonical_input.json was modified after the receipt was issued, or the wrong canonical_input.json is paired with this p1.json. The two are not from the same verification event.
+
+Resolve the flagged failure and regenerate the bundle before re-verification.

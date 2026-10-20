@@ -1,0 +1,1 @@
+The verification record requires review before it can be relied upon. The record is undamaged, but the signer's credential had lapsed by the date the check was made. This is usually an expired authorisation, not a sign of wrongdoing. The issuer must resolve the flagged conditions before the record is used.

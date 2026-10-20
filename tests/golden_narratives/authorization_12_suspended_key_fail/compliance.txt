@@ -1,0 +1,5 @@
+The bundle fails offline verification. The receipt cannot be cited as supporting the declared evidence and must not be accepted for listing, settlement, or any downstream operational use.
+
+The evidence is intact, but the signing key is currently on hold. The bundle has not been altered. The registry records the issuer's key as suspended, which is a reversible state rather than a withdrawal of trust. The registry does not say why, so the hold may be administrative or precautionary. The record cannot be relied upon while it is in force. Determine with the registry operator why the key is suspended and whether reinstatement is expected. Hold the transaction rather than rejecting the issuer outright, and re-verify once the hold is lifted.
+
+Do not treat this as a defective bundle: the evidence is intact and regenerating it would not change the outcome. The remediation stated against the authorization finding above applies, and depending on that finding it falls to the issuer, to the registry operator, or to your own trust material. Document the outcome in the audit trail.

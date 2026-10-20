@@ -1,0 +1,7 @@
+The bundle fails offline verification. The receipt cannot be cited as supporting the declared evidence and must not be accepted for listing, settlement, or any downstream operational use.
+
+The envelope no longer corresponds to its inner receipt and evidence. The bundle is internally inconsistent: the envelope claims to wrap one set of contents, the actual contents are a different set. A receipt cited from this bundle has no defensible cryptographic support. Reject the bundle. Require the issuer to regenerate the entire bundle from clean source state. Do not attempt partial repair.
+
+The bundle's index of files has been modified after the receipt was issued. The manifest is the document inventory that the receipt commits to. A modified manifest means the bundle no longer describes the evidence set the receipt was issued for. Subsequent file hash checks become meaningless because they reference an altered baseline. Reject the bundle. Require the issuer to regenerate manifest, sidecar hash, and receipt together from a clean source state.
+
+Reject the bundle. Require the issuer to address every failing condition listed above and resubmit. Document each rejection reason in the audit trail.

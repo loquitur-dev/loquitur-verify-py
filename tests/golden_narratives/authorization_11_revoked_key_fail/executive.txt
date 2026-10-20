@@ -1,0 +1,1 @@
+The verification record is rejected and cannot be relied upon. The record itself is undamaged, but the credential used to sign it has been withdrawn — typically because it was compromised. This needs investigation, not a resubmission. What must be resolved is the signer's authority, not the record itself.

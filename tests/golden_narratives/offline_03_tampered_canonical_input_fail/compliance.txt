@@ -1,0 +1,5 @@
+The bundle fails offline verification. The receipt cannot be cited as supporting the declared evidence and must not be accepted for listing, settlement, or any downstream operational use.
+
+The receipt is not paired with the canonical input it was issued against. The receipt does not describe the input file present in this bundle. Treating the receipt as authoritative for this input would be a misstatement: the receipt was generated for a different input and cannot be cited here. Reject the bundle. Require the issuer to re-pair the correct receipt with the correct canonical input, or to regenerate both, and resubmit.
+
+Reject the bundle. Require the issuer to address the failing condition and resubmit. Document the rejection in the audit trail.

@@ -1,0 +1,39 @@
+{
+  "effective_at": "2026-04-29T12:00:00Z",
+  "entries": [
+    {
+      "allowed_asset_types": [
+        "fund_nav"
+      ],
+      "allowed_workflows": [
+        "property_pre_listing",
+        "property_review",
+        "fund_nav_initial",
+        "fund_nav_update"
+      ],
+      "effective_from": "2026-04-29T12:00:00Z",
+      "expires_at": "2026-05-29T12:00:00Z",
+      "issuer_display_name": "Synthetic Mid-Market RE Fund I Issuer",
+      "issuer_id": "issuer_synthetic_demo",
+      "issuer_key_id": "demo-key-2",
+      "key_type": "secp256k1",
+      "notes": "Synthetic demo issuer only. Not a production issuer authorization.",
+      "public_key_hex": "049dd6b8f8236d4cda3a1b8a533a2ba1b83c002939ed5ceb7804d69bf8022160b8f3d0dd9e830076203a82f38c668ac93edbd47cb8cba7a311f3c9025262806efd",
+      "revocation_reason": null,
+      "revoked_at": null,
+      "status": "active"
+    }
+  ],
+  "expires_at": "2026-05-29T12:00:00Z",
+  "issued_at": "2026-04-29T12:00:00Z",
+  "object_type": "trust_registry",
+  "registry_operator_id": "operator_loquitur_demo",
+  "registry_version": "0.1.0-demo",
+  "schema_version": "v1",
+  "signature": {
+    "algorithm": "secp256k1_ecdsa_sha256",
+    "key_id": "trust-registry-demo-key",
+    "signature": "demo-trust-registry-signature-placeholder-non-production"
+  },
+  "trust_registry_id": "tr_synthetic_demo_0001"
+}

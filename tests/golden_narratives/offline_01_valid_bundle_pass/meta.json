@@ -1,0 +1,6 @@
+{
+  "bundle_filename": "valid_bundle.zip",
+  "context": "offline_verification",
+  "description": "Clean PASS: integrity verified end-to-end on a valid bundle.",
+  "scenario_id": "offline_01_valid_bundle_pass"
+}

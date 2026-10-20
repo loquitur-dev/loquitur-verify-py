@@ -1,0 +1,43 @@
+# Shared baseline, kept in step across the Loquitur repositories, so that in each of them a
+# stray environment file is ignored rather than one `git add -A` away from a commit. The
+# per-repository section below carries what only this repository needs.
+
+# Secrets and local configuration. `.env.example` is the documented template and is kept.
+.env
+.env.*
+!.env.example
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg
+*.egg-info/
+.eggs/
+build/
+dist/
+
+# Test, lint and type caches
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+.coverage
+coverage.xml
+htmlcov/
+.hypothesis/
+.tox/
+
+# Editors
+.vscode/
+.idea/
+
+# Environments
+.venv/
+venv/
+
+# Node
+node_modules/
+npm-debug.log*
+
+# OS
+.DS_Store
+Thumbs.db

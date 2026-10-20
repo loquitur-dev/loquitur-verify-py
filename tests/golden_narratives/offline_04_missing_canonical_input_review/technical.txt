@@ -1,0 +1,5 @@
+Offline verification produced a REVIEW verdict. The bundle is structurally well-formed but at least one check did not complete with confirmation.
+
+Offline verifier could not locate canonical_input.json. Surface code emitted by the offline verifier when canonical_input.json is not present in the bundle root. Equivalent in semantics to COMPLETENESS_OFFLINE_MISSING_CANONICAL_INPUT; emitted from the offline verifier path.
+
+The bundle is not rejected but cannot be confirmed PASS at the offline layer until the flagged checks are resolved or completed.

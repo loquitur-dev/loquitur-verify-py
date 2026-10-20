@@ -1,0 +1,5 @@
+Offline verification produced a FAIL verdict. At least one deterministic check rejected the bundle.
+
+The issuing key was revoked in the trust registry. Bundle integrity verified: manifest, P1, envelope and canonical-input replay all matched. The registry entry's signature is well formed. Authorization failed because the trust registry marks the issuer key as revoked, which holds at every evaluation time and when none is supplied. Revocation is the containment control applied after a key is believed compromised. Note the check order: revocation is evaluated before the trust registry's own validity window, so a stale registry does not mask it. A revocation does not un-happen, and the registry remains credible about it even once its window has lapsed. Suspension cannot mask it either: status is a single value, so an entry is suspended or revoked, never both.
+
+The bundle is internally consistent: manifest, P1, envelope and canonical-input replay all verified. The rejection is at the authorization layer. Act on the specific authorization finding above rather than on the aggregate verdict.

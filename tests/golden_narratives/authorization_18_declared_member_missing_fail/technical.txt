@@ -1,0 +1,7 @@
+Offline verification produced a FAIL verdict. At least one deterministic check rejected the bundle.
+
+At least one manifest-declared file hash does not match. A file declared in manifest.json has a recomputed SHA-256 that differs from the value in the manifest. The file has been replaced, edited, or re-exported after the manifest was produced. The check covers all files listed in the manifest; the per-file diff identifies the specific failing entries.
+
+Offline verifier could not locate canonical_input.json. Surface code emitted by the offline verifier when canonical_input.json is not present in the bundle root. Equivalent in semantics to COMPLETENESS_OFFLINE_MISSING_CANONICAL_INPUT; emitted from the offline verifier path.
+
+Resolve the flagged failures (in canonical order: integrity → coverage → freshness → conflict → policy) and regenerate the bundle before re-verification.

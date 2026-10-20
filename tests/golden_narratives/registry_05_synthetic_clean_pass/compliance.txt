@@ -1,0 +1,11 @@
+The registry entry is a public commitment that the underlying bundle passes offline verification. The receipt may be cited as a faithful representation of the evidence the issuer attested to, subject to downstream review at the coverage, freshness, conflict, and materiality layers.
+
+Bundle integrity is intact and the receipt may be cited. The cryptographic linkage between the receipt and its supporting evidence is intact. The receipt can be cited as a faithful representation of the evidence the issuer attested to. This is a precondition for relying on the verdict, not a verdict on the underlying valuation. No action required at the integrity layer. Continue with the remaining verdict review (coverage, freshness, conflict, materiality).
+
+The bundle covers every claim the policy requires. Required claim coverage is met. This does not mean the claims are correct; it means none are missing. Document-backing, freshness, and conflict status are evaluated separately. No action required at the coverage layer. Continue with downstream verdict review.
+
+Evidence is current relative to the snapshot effective date. No evidence in this bundle is stale relative to policy. The receipt reflects current information at the time of issuance. No action required at the freshness layer.
+
+Required source documents are present and bound to their claims. Evidence inventory is met. Document-claim bindings establish the audit trail. Freshness and conflict status are evaluated separately; presence alone is not sufficient for verdict. No action required at the evidence layer. Continue with freshness and conflict review.
+
+Document the offline verification outcome in the audit trail. Continue with policy-layer evaluation (coverage, freshness, conflict, materiality) as required by the workflow.

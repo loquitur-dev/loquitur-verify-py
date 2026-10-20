@@ -1,0 +1,5 @@
+The bundle passes offline verification. The receipt may be cited as a faithful representation of the evidence the issuer attested to, subject to downstream review at the coverage, freshness, conflict, and materiality layers.
+
+Bundle integrity is intact and the receipt may be cited. The cryptographic linkage between the receipt and its supporting evidence is intact. The receipt can be cited as a faithful representation of the evidence the issuer attested to. This is a precondition for relying on the verdict, not a verdict on the underlying valuation. No action required at the integrity layer. Continue with the remaining verdict review (coverage, freshness, conflict, materiality).
+
+Document the offline verification outcome in the audit trail. Continue with policy-layer evaluation (coverage, freshness, conflict, materiality) as required by the workflow.

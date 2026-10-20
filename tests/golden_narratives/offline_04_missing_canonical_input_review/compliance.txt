@@ -1,0 +1,5 @@
+The bundle requires review. At least one operational condition blocks PASS at the offline layer and must be resolved before the receipt can be relied upon for downstream decisions.
+
+Offline verifier cannot find the canonical input. Replay cannot proceed without canonical input. Verdict drops to REVIEW. Require canonical_input.json to be attached and bundle resubmitted.
+
+Do not advance the receipt to operational use until the flagged conditions are resolved. Document the review action and outcome in the audit trail before any downstream consumption.

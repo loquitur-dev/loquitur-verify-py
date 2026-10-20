@@ -1,0 +1,1 @@
+The public registry entry records a verification that requires review. Documents in this record contradict each other on a key value. The issuer must resolve the contradiction before the record can be relied upon. The issuer must resolve the flagged conditions before the record is used.

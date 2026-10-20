@@ -1,0 +1,5 @@
+Offline verification produced a FAIL verdict. At least one deterministic check rejected the bundle.
+
+The registry entry signature did not verify against the authorized key. Bundle-level integrity verified: the manifest, P1 and envelope digests matched. The registry entry's own signature failed verification against the public key the trust registry authorizes. This covers a missing signature, a signature that does not verify, and an entry naming a key other than the authorized one. The entry was altered after signing, or it was signed by a different key.
+
+The bundle's own contents verified; what failed is the signature over the registry entry. Preserve the artifacts as received before requesting anything from the issuer.

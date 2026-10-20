@@ -1,0 +1,1 @@
+The verification record is rejected and cannot be relied upon. The record is undamaged and the signer is authorized by the supplied trust registry, but not for this type of asset. Either the record is filed under the wrong type or the signer's remit is out of date. What must be resolved is the signer's authority, not the record itself.

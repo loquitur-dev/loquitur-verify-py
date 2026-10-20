@@ -1,0 +1,5 @@
+Offline verification produced a FAIL verdict. At least one deterministic check rejected the bundle.
+
+The issuing key is authorized, but not for this asset type or workflow. Bundle integrity verified, the registry entry is well formed, and the issuer key is active and within its validity window. The trust registry constrains this key to a declared set of asset types and workflows, and the entry names one outside that set. Authority is scoped, so holding a valid key is not sufficient.
+
+The bundle is internally consistent: manifest, P1, envelope and canonical-input replay all verified. The rejection is at the authorization layer. Act on the specific authorization finding above rather than on the aggregate verdict.

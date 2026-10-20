@@ -1,0 +1,5 @@
+Offline verification produced a PASS verdict. The bundle's manifest, P1 receipt, and envelope hashes recompute deterministically to their declared values.
+
+The issuing key was authorized by the trust registry at the evaluation time. The key named by the registry entry is listed in the supplied trust registry, carries active status, falls within both the registry's and its own validity window at the operator's evaluation time, and is authorized for the entry's asset type and workflow. This is authorization against the supplied trust material only: the trust registry's own root signature is not verified, so that material is trusted as given.
+
+No further integrity action is required at the offline layer. Coverage, freshness, conflict, and materiality remain to be evaluated by the policy engine where applicable.

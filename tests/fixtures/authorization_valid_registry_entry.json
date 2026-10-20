@@ -1,0 +1,33 @@
+{
+  "anchor": null,
+  "anchored_at": null,
+  "asset_type": "property",
+  "disclosure_profile": "issuer_controlled_bundle",
+  "effective_at": "2026-05-10T00:00:00Z",
+  "issued_at": "2026-05-10T00:00:00Z",
+  "issuer_id": "issuer_synthetic_demo",
+  "issuer_key_id": "demo-key-2",
+  "manifest_hash": "sha256:729af76ab574eb315b791bf5fb7f84a5bb5f1bceacd6622f3122c3f0946e9170",
+  "object_type": "registry_entry",
+  "policy_id": "loquitur.policy.property.demo",
+  "policy_version": "1.0.0",
+  "privacy_classification": "public_commitment",
+  "reason_code_catalog_version": "loquitur.reason_codes.v1",
+  "reason_codes": [
+    "INTEGRITY_OK"
+  ],
+  "receipt_hash": "sha256:b14b7a43d0ab5ff056350c36ee799470ce5db0cdd36255ae6eaf0a9e0bf156b4",
+  "receipt_id": "vr_1593dc55411470a5c6f82a53",
+  "registry_entry_id": "reg_be1468838bc3d6ee12ee5d25",
+  "schema_version": "v1",
+  "signature": {
+    "algorithm": "secp256k1_ecdsa_sha256",
+    "key_id": "demo-key-2",
+    "payload_id": "registry_entry_signing_payload_v2",
+    "payload_version": 2,
+    "signature": "438f2e18592da25c9cb2407f0de44cfa9e2e90f2a849c70c15640a8ca674e2ab0474a295fc9b109ba8715a6ecf04e4f3bb40c535dcc3ef722e12db4f4c10fac4"
+  },
+  "subject_ref_hash": "sha256:1a488f7f16b2ad048f255d08c60fcef2a84f638a9a532712a0eca767610d4f05",
+  "verdict": "PASS",
+  "workflow": "property_review"
+}

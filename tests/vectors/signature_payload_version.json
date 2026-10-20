@@ -1,0 +1,74 @@
+{
+  "automatic_fallback": false,
+  "schema_version": "loquitur.signature_payload_version_vectors.v1",
+  "unknown_payload_entry": {
+    "anchor": null,
+    "anchored_at": null,
+    "asset_type": "fund_nav",
+    "disclosure_profile": "issuer_controlled_bundle",
+    "effective_at": "2026-04-29T00:00:00Z",
+    "issued_at": "2026-04-29T12:00:00Z",
+    "issuer_id": "issuer_synthetic_demo",
+    "issuer_key_id": "demo-key-2",
+    "manifest_hash": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+    "object_type": "registry_entry",
+    "policy_id": "loquitur.fund_nav.v1",
+    "policy_version": "1.0.0",
+    "privacy_classification": "public_commitment",
+    "reason_code_catalog_version": "loquitur.reason_codes.v1",
+    "reason_codes": [
+      "CONFLICTING_EVIDENCE_DETECTED"
+    ],
+    "receipt_hash": "sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+    "receipt_id": "vr_synthetic_demo_0001",
+    "registry_entry_id": "reg_synthetic_demo_0001",
+    "schema_version": "v1",
+    "signature": {
+      "algorithm": "secp256k1_ecdsa_sha256",
+      "key_id": "demo-key-2",
+      "payload_id": "registry_entry_signing_payload_v999",
+      "payload_version": 999,
+      "signature": "07948e08aae06fcd6cb6a20e4aa38eae472c088abc7f763e4b9ea2c3b7ad4ffe21d9be70adc64a83540593e2cd5dee66891e1fdea2b8f5a653e4032647a8e163"
+    },
+    "subject_ref_hash": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "verdict": "REVIEW",
+    "workflow": "fund_nav_update"
+  },
+  "unknown_payload_expected_error": {
+    "code": "unsupported_version",
+    "object": "signing_payload",
+    "version": "registry_entry_signing_payload_v999/999"
+  },
+  "v2_metadata_stripped_entry": {
+    "anchor": null,
+    "anchored_at": null,
+    "asset_type": "fund_nav",
+    "disclosure_profile": "issuer_controlled_bundle",
+    "effective_at": "2026-04-29T00:00:00Z",
+    "issued_at": "2026-04-29T12:00:00Z",
+    "issuer_id": "issuer_synthetic_demo",
+    "issuer_key_id": "demo-key-2",
+    "manifest_hash": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+    "object_type": "registry_entry",
+    "policy_id": "loquitur.fund_nav.v1",
+    "policy_version": "1.0.0",
+    "privacy_classification": "public_commitment",
+    "reason_code_catalog_version": "loquitur.reason_codes.v1",
+    "reason_codes": [
+      "CONFLICTING_EVIDENCE_DETECTED"
+    ],
+    "receipt_hash": "sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+    "receipt_id": "vr_synthetic_demo_0001",
+    "registry_entry_id": "reg_synthetic_demo_0001",
+    "schema_version": "v1",
+    "signature": {
+      "algorithm": "secp256k1_ecdsa_sha256",
+      "key_id": "demo-key-2",
+      "signature": "517754c8cfc9ffaff886587c6ee477cfb4640d25ab776f5435d907824793a4563bbdd20f972341b2984ff269a8e6e1b7689d262df03c55493a7f4068d63a78ec"
+    },
+    "subject_ref_hash": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "verdict": "REVIEW",
+    "workflow": "fund_nav_update"
+  },
+  "v2_metadata_stripped_expected_error": "registry_entry_contract_violation"
+}

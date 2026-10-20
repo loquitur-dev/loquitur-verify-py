@@ -1,0 +1,11 @@
+{
+  "context": "registry_entry",
+  "description": "Synthetic WARN: a supersession whose material change is above the policy threshold.",
+  "reason_codes": [
+    "INTEGRITY_OK",
+    "REQUIRED_CLAIMS_PRESENT",
+    "MATERIAL_CHANGE_DETECTED"
+  ],
+  "scenario_id": "registry_06_synthetic_material_change_warn",
+  "verdict": "WARN"
+}

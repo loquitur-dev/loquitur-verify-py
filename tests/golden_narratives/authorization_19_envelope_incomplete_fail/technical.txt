@@ -1,0 +1,5 @@
+Offline verification produced a FAIL verdict. At least one deterministic check rejected the bundle.
+
+Envelope (env1) hash does not match its declared value. The recomputed SHA-256 of the envelope wrapping the P1 receipt does not match the envelope_sha256 declared in the manifest or sidecar. The envelope has been modified after issuance, or the manifest reference is stale. The receipt's outer wrapper cannot be trusted as authentic.
+
+Resolve the flagged failure and regenerate the bundle before re-verification.

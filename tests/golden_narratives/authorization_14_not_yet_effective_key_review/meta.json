@@ -1,0 +1,8 @@
+{
+  "bundle_dirname": "link_valid_bundle",
+  "context": "authorization",
+  "description": "REVIEW: evidence intact, issuer key not yet authorized at the operator's evaluation time; with no attested signing time a window is a question, not a failure.",
+  "registry_entry_filename": "authorization_valid_registry_entry.json",
+  "scenario_id": "authorization_14_not_yet_effective_key_review",
+  "trust_registry_filename": "authorization_not_yet_effective_trust_registry.json"
+}

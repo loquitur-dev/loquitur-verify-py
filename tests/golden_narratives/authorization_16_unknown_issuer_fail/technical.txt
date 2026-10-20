@@ -1,0 +1,5 @@
+Offline verification produced a FAIL verdict. At least one deterministic check rejected the bundle.
+
+The issuer or issuing key is absent from the trust registry. Bundle integrity verified and the registry entry is well formed. The issuer identifier, or the specific key identifier it names, has no entry in the supplied trust registry. The verifier draws no conclusion about the issuer's legitimacy: an unknown issuer and an untrusted issuer are indistinguishable from a registry that does not list it.
+
+The bundle is internally consistent: manifest, P1, envelope and canonical-input replay all verified. The rejection is at the authorization layer. Act on the specific authorization finding above rather than on the aggregate verdict.

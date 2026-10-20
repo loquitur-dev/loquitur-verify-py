@@ -1,0 +1,132 @@
+{
+  "curve": "secp256k1",
+  "hash": "sha256-prehashed",
+  "cases": [
+    {
+      "name": "valid_low_s",
+      "digest": "715aebf43b52a5696b2b03ac4ace8b203fe48b165ab78c7be928fb04279bc152",
+      "signature": "07c8d1412c58d8c2bba06a0f13ddb71c9a40349c3d6111634e0b706716a869d32f383337dad563785269e8d61f66ff6cab0dd689740811bb782a5c29e64ab2ea",
+      "public_key": "046c1e4ab5e4b3f2d3ffba19e552e5c7b5edccf2197c8935d2f171fc9be1fd40acc1e1b9a20fe79a768f1c68680153c975b95528a05339542cf8860103e50df699",
+      "accept": true
+    },
+    {
+      "name": "high_s",
+      "digest": "715aebf43b52a5696b2b03ac4ace8b203fe48b165ab78c7be928fb04279bc152",
+      "signature": "07c8d1412c58d8c2bba06a0f13ddb71c9a40349c3d6111634e0b706716a869d3d0c7ccc8252a9c87ad961729e09900920fa1065d3b408e8047a80262e9eb8e57",
+      "public_key": "046c1e4ab5e4b3f2d3ffba19e552e5c7b5edccf2197c8935d2f171fc9be1fd40acc1e1b9a20fe79a768f1c68680153c975b95528a05339542cf8860103e50df699",
+      "accept": false
+    },
+    {
+      "name": "r_zero",
+      "digest": "715aebf43b52a5696b2b03ac4ace8b203fe48b165ab78c7be928fb04279bc152",
+      "signature": "00000000000000000000000000000000000000000000000000000000000000002f383337dad563785269e8d61f66ff6cab0dd689740811bb782a5c29e64ab2ea",
+      "public_key": "046c1e4ab5e4b3f2d3ffba19e552e5c7b5edccf2197c8935d2f171fc9be1fd40acc1e1b9a20fe79a768f1c68680153c975b95528a05339542cf8860103e50df699",
+      "accept": false
+    },
+    {
+      "name": "s_zero",
+      "digest": "715aebf43b52a5696b2b03ac4ace8b203fe48b165ab78c7be928fb04279bc152",
+      "signature": "07c8d1412c58d8c2bba06a0f13ddb71c9a40349c3d6111634e0b706716a869d30000000000000000000000000000000000000000000000000000000000000000",
+      "public_key": "046c1e4ab5e4b3f2d3ffba19e552e5c7b5edccf2197c8935d2f171fc9be1fd40acc1e1b9a20fe79a768f1c68680153c975b95528a05339542cf8860103e50df699",
+      "accept": false
+    },
+    {
+      "name": "r_equals_n",
+      "digest": "715aebf43b52a5696b2b03ac4ace8b203fe48b165ab78c7be928fb04279bc152",
+      "signature": "fffffffffffffffffffffffffffffffebaaedce6af48a03bbfd25e8cd03641412f383337dad563785269e8d61f66ff6cab0dd689740811bb782a5c29e64ab2ea",
+      "public_key": "046c1e4ab5e4b3f2d3ffba19e552e5c7b5edccf2197c8935d2f171fc9be1fd40acc1e1b9a20fe79a768f1c68680153c975b95528a05339542cf8860103e50df699",
+      "accept": false
+    },
+    {
+      "name": "s_equals_n",
+      "digest": "715aebf43b52a5696b2b03ac4ace8b203fe48b165ab78c7be928fb04279bc152",
+      "signature": "07c8d1412c58d8c2bba06a0f13ddb71c9a40349c3d6111634e0b706716a869d3fffffffffffffffffffffffffffffffebaaedce6af48a03bbfd25e8cd0364141",
+      "public_key": "046c1e4ab5e4b3f2d3ffba19e552e5c7b5edccf2197c8935d2f171fc9be1fd40acc1e1b9a20fe79a768f1c68680153c975b95528a05339542cf8860103e50df699",
+      "accept": false
+    },
+    {
+      "name": "r_above_n",
+      "digest": "715aebf43b52a5696b2b03ac4ace8b203fe48b165ab78c7be928fb04279bc152",
+      "signature": "fffffffffffffffffffffffffffffffebaaedce6af48a03bbfd25e8cd03641422f383337dad563785269e8d61f66ff6cab0dd689740811bb782a5c29e64ab2ea",
+      "public_key": "046c1e4ab5e4b3f2d3ffba19e552e5c7b5edccf2197c8935d2f171fc9be1fd40acc1e1b9a20fe79a768f1c68680153c975b95528a05339542cf8860103e50df699",
+      "accept": false
+    },
+    {
+      "name": "r_plus_n_alias",
+      "digest": "715aebf43b52a5696b2b03ac4ace8b203fe48b165ab78c7be928fb04279bc152",
+      "signature": "fffffffffffffffffffffffffffffffebaaedce6af48a03bbfd25e8cd03641432f383337dad563785269e8d61f66ff6cab0dd689740811bb782a5c29e64ab2ea",
+      "public_key": "046c1e4ab5e4b3f2d3ffba19e552e5c7b5edccf2197c8935d2f171fc9be1fd40acc1e1b9a20fe79a768f1c68680153c975b95528a05339542cf8860103e50df699",
+      "accept": false
+    },
+    {
+      "name": "wrong_digest",
+      "digest": "d9298a10d1b0735837dc4bd85dac641b0f3cef27a47e5d53a54f2f3f5b2fcffa",
+      "signature": "07c8d1412c58d8c2bba06a0f13ddb71c9a40349c3d6111634e0b706716a869d32f383337dad563785269e8d61f66ff6cab0dd689740811bb782a5c29e64ab2ea",
+      "public_key": "046c1e4ab5e4b3f2d3ffba19e552e5c7b5edccf2197c8935d2f171fc9be1fd40acc1e1b9a20fe79a768f1c68680153c975b95528a05339542cf8860103e50df699",
+      "accept": false
+    },
+    {
+      "name": "double_hashed_digest",
+      "digest": "aa0ad750a0107d715824adeaee10d88712d652d33ba14857ce0d2cb9865e88cf",
+      "signature": "07c8d1412c58d8c2bba06a0f13ddb71c9a40349c3d6111634e0b706716a869d32f383337dad563785269e8d61f66ff6cab0dd689740811bb782a5c29e64ab2ea",
+      "public_key": "046c1e4ab5e4b3f2d3ffba19e552e5c7b5edccf2197c8935d2f171fc9be1fd40acc1e1b9a20fe79a768f1c68680153c975b95528a05339542cf8860103e50df699",
+      "accept": false
+    },
+    {
+      "name": "off_curve_key",
+      "digest": "715aebf43b52a5696b2b03ac4ace8b203fe48b165ab78c7be928fb04279bc152",
+      "signature": "07c8d1412c58d8c2bba06a0f13ddb71c9a40349c3d6111634e0b706716a869d32f383337dad563785269e8d61f66ff6cab0dd689740811bb782a5c29e64ab2ea",
+      "public_key": "046c1e4ab5e4b3f2d3ffba19e552e5c7b5edccf2197c8935d2f171fc9be1fd40acc1e1b9a20fe79a768f1c68680153c975b95528a05339542cf8860103e50df69a",
+      "accept": false
+    },
+    {
+      "name": "small_x_canonical_forgery_valid",
+      "digest": "31ae223e8bf0ebb14f043c716d991cc4da60f55ad652f47e9df4d4904b55479a",
+      "signature": "2fe505f1c9f757635fde16a24371ce0ed05a1eedfcf1edf294178b377879bead6877c3bf91471568a1a9816e8704e7d0e340d6259d768be27c780d7af1069936",
+      "public_key": "0400000000000000000000000000000000000000000000000000000000000000014218f20ae6c646b363db68605822fb14264ca8d2587fdd6fbc750d587e76a7ee",
+      "accept": true
+    },
+    {
+      "name": "x_not_below_p",
+      "digest": "31ae223e8bf0ebb14f043c716d991cc4da60f55ad652f47e9df4d4904b55479a",
+      "signature": "2fe505f1c9f757635fde16a24371ce0ed05a1eedfcf1edf294178b377879bead6877c3bf91471568a1a9816e8704e7d0e340d6259d768be27c780d7af1069936",
+      "public_key": "04fffffffffffffffffffffffffffffffffffffffffffffffffffffffefffffc304218f20ae6c646b363db68605822fb14264ca8d2587fdd6fbc750d587e76a7ee",
+      "accept": false
+    },
+    {
+      "name": "small_y_canonical_forgery_valid",
+      "digest": "32b76837cda44ef88e225818270c62170359ae7407aef86db9bcff805bf8d7e8",
+      "signature": "de57bab0de30705d98fa3f12a9d684fc0289601f831868ffebbfaadd698b460a784eb14a9a1f0b19f4b439bc4420771e91dba85400e552b0ee87c269811ba5a1",
+      "public_key": "041fe1e5ef3fceb5c135ab7741333ce5a6e80d68167653f6b2b24bcbcfaaaff5070000000000000000000000000000000000000000000000000000000000000001",
+      "accept": true
+    },
+    {
+      "name": "y_not_below_p",
+      "digest": "32b76837cda44ef88e225818270c62170359ae7407aef86db9bcff805bf8d7e8",
+      "signature": "de57bab0de30705d98fa3f12a9d684fc0289601f831868ffebbfaadd698b460a784eb14a9a1f0b19f4b439bc4420771e91dba85400e552b0ee87c269811ba5a1",
+      "public_key": "041fe1e5ef3fceb5c135ab7741333ce5a6e80d68167653f6b2b24bcbcfaaaff507fffffffffffffffffffffffffffffffffffffffffffffffffffffffefffffc30",
+      "accept": false
+    },
+    {
+      "name": "compressed_key_form",
+      "digest": "715aebf43b52a5696b2b03ac4ace8b203fe48b165ab78c7be928fb04279bc152",
+      "signature": "07c8d1412c58d8c2bba06a0f13ddb71c9a40349c3d6111634e0b706716a869d32f383337dad563785269e8d61f66ff6cab0dd689740811bb782a5c29e64ab2ea",
+      "public_key": "036c1e4ab5e4b3f2d3ffba19e552e5c7b5edccf2197c8935d2f171fc9be1fd40ac",
+      "accept": false
+    },
+    {
+      "name": "uppercase_hex_key",
+      "digest": "715aebf43b52a5696b2b03ac4ace8b203fe48b165ab78c7be928fb04279bc152",
+      "signature": "07c8d1412c58d8c2bba06a0f13ddb71c9a40349c3d6111634e0b706716a869d32f383337dad563785269e8d61f66ff6cab0dd689740811bb782a5c29e64ab2ea",
+      "public_key": "046C1E4AB5E4B3F2D3FFBA19E552E5C7B5EDCCF2197C8935D2F171FC9BE1FD40ACC1E1B9A20FE79A768F1C68680153C975B95528A05339542CF8860103E50DF699",
+      "accept": false
+    },
+    {
+      "name": "uppercase_hex_signature",
+      "digest": "715aebf43b52a5696b2b03ac4ace8b203fe48b165ab78c7be928fb04279bc152",
+      "signature": "07C8D1412C58D8C2BBA06A0F13DDB71C9A40349C3D6111634E0B706716A869D32F383337DAD563785269E8D61F66FF6CAB0DD689740811BB782A5C29E64AB2EA",
+      "public_key": "046c1e4ab5e4b3f2d3ffba19e552e5c7b5edccf2197c8935d2f171fc9be1fd40acc1e1b9a20fe79a768f1c68680153c975b95528a05339542cf8860103e50df699",
+      "accept": false
+    }
+  ]
+}

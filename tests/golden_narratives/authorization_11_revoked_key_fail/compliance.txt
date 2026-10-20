@@ -1,0 +1,5 @@
+The bundle fails offline verification. The receipt cannot be cited as supporting the declared evidence and must not be accepted for listing, settlement, or any downstream operational use.
+
+The evidence is intact, but the key that signed it has been revoked. The bundle is internally consistent and has not been altered. What failed is authority: the trust registry withdrew this signing key, which is the action taken when a key is believed to be compromised. Records signed by a revoked key carry no assurance about who produced them, regardless of how well formed they are. Investigate why the key was revoked before treating this as a routine rejection. Do not request a regenerated bundle from the same key. Obtain re-issued evidence under a currently authorized key and record the revocation event in the audit trail.
+
+Do not treat this as a defective bundle: the evidence is intact and regenerating it would not change the outcome. The remediation stated against the authorization finding above applies, and depending on that finding it falls to the issuer, to the registry operator, or to your own trust material. Document the outcome in the audit trail.

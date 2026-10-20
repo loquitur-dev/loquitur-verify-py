@@ -1,0 +1,5 @@
+Offline verification produced a REVIEW verdict. The bundle is structurally well-formed but at least one check did not complete with confirmation.
+
+The issuing key had not yet come into force at the evaluation time. Bundle integrity verified and the registry entry is well formed. The operator's evaluation time precedes the key's effective_from, so at that time the signer held no authority under the supplied trust registry. Version 0.1 has no attested signing time, so the dates the issuer writes into the entry do not decide this. This is the opposite direction from an expired key: an evaluation time before the key's authority began usually means that the evaluation time or the trust registry copy does not fit the question being asked, and it needs explaining before the record is relied on.
+
+The bundle is not rejected but cannot be confirmed PASS at the offline layer until the flagged checks are resolved or completed.

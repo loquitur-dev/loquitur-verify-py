@@ -1,0 +1,5 @@
+The bundle fails offline verification. The receipt cannot be cited as supporting the declared evidence and must not be accepted for listing, settlement, or any downstream operational use.
+
+The evidence is intact, but the signer is not listed in the trust material. The bundle has not been altered. The party that signed it does not appear in the trust registry supplied to the verifier. Either the wrong trust material was used, or this counterparty was never authorized to issue this evidence. Determine whether the correct trust registry was supplied before treating this as an unauthorized issuer. Confirm the counterparty's expected issuer identity out of band, and reject the record if it remains unlisted.
+
+Do not treat this as a defective bundle: the evidence is intact and regenerating it would not change the outcome. The remediation stated against the authorization finding above applies, and depending on that finding it falls to the issuer, to the registry operator, or to your own trust material. Document the outcome in the audit trail.

@@ -1,0 +1,1 @@
+The verification record is rejected and cannot be relied upon. The package is internally consistent, but the signature on the record does not match the approved signer. Treat this as possible tampering and preserve it. Preserve this record as received; it should not be replaced by a corrected copy.

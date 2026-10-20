@@ -1,0 +1,1 @@
+The verification record is rejected and cannot be relied upon. The outer wrapper of this record has been altered. The issuer's signature can no longer be reliably tied to the content. The record is rejected. The issuer must produce a corrected version.

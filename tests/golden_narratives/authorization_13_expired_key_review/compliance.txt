@@ -1,0 +1,5 @@
+The bundle requires review. At least one operational condition blocks PASS at the offline layer and must be resolved before the receipt can be relied upon for downstream decisions.
+
+The evidence is intact, but the signing key's authorization had lapsed by the evaluation date. The bundle has not been altered and the issuer is known to the registry. The key's authorization period had ended by the date the verification was evaluated at. Without an attested signing time this does not show that the record was signed after the key expired; it is normally a lapsed credential or an unrenewed registry entry rather than a security event. Determine when the record was signed and whether the key was authorized then. If the issuer continued signing after its key expired, other records you hold from the same period carry the same defect and must be re-examined. Otherwise require re-issued evidence under a currently authorized key.
+
+Do not advance the receipt to operational use until the flagged conditions are resolved. Document the review action and outcome in the audit trail before any downstream consumption.

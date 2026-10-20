@@ -1,0 +1,7 @@
+The registry entry records a REVIEW verdict. At least one operational condition was not confirmed at issuance time and must be resolved before the receipt can be relied upon for downstream decisions.
+
+Bundle integrity is intact and the receipt may be cited. The cryptographic linkage between the receipt and its supporting evidence is intact. The receipt can be cited as a faithful representation of the evidence the issuer attested to. This is a precondition for relying on the verdict, not a verdict on the underlying valuation. No action required at the integrity layer. Continue with the remaining verdict review (coverage, freshness, conflict, materiality).
+
+The bundle contains internally contradictory evidence. Two or more documents disagree on a material claim. The protocol does not adjudicate which value is correct; it records the conflict and refuses to issue PASS. Acting on a receipt with unresolved conflicts means picking one of the conflicting values without a documented basis, which is not defensible in audit. Require the issuer to resolve the conflict: identify which document is current, withdraw the stale one, or attach an explicit reconciliation note. Then regenerate the bundle and resubmit.
+
+Do not advance the receipt to operational use until the flagged conditions are resolved. Document the review action and outcome in the audit trail before any downstream consumption.

@@ -1,0 +1,6 @@
+{
+  "bundle_filename": "tampered_manifest_bundle.zip",
+  "context": "offline_verification",
+  "description": "FAIL: manifest content edited after sidecar hash produced.",
+  "scenario_id": "offline_02_tampered_manifest_fail"
+}

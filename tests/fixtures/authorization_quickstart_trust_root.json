@@ -1,0 +1,14 @@
+{
+  "object_type": "trust_root_document",
+  "roots": [
+    {
+      "key_id": "quickstart-root-without-authority",
+      "key_type": "secp256k1",
+      "not_after": "2026-07-01T00:00:00Z",
+      "not_before": "2026-04-01T00:00:00Z",
+      "public_key_hex": "04b77908150a1ca3c39fa62623d5a17bee2e792a77ba800615e66d1fda7e65702b057d4ade54d57ed7d46544a6d16baca7863556f4819b2d004e19fbb1cc07e49c",
+      "status": "active"
+    }
+  ],
+  "schema_version": "v1"
+}

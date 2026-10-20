@@ -1,0 +1,5 @@
+The bundle passes offline verification. The receipt may be cited as a faithful representation of the evidence the issuer attested to, subject to downstream review at the coverage, freshness, conflict, and materiality layers.
+
+The issuer's authority verified against the supplied trust material. The key that signed this record is listed, active, within its authorization window, and permitted for this asset type and workflow. Both conditions for reliance hold: the evidence is intact, and the party that attested to it held authority to do so. This is not a judgement on the underlying valuation, and it rests on the trust material supplied to the verifier. Document both the integrity and the authorization outcome in the audit trail, and confirm the trust material used was current for the evaluation date. Continue with policy-layer evaluation as required by the workflow.
+
+Document the offline verification outcome in the audit trail. Continue with policy-layer evaluation (coverage, freshness, conflict, materiality) as required by the workflow.

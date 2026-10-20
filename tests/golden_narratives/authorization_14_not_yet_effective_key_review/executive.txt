@@ -1,0 +1,1 @@
+The verification record requires review before it can be relied upon. The record is undamaged, but at the date the check was made the signer was not yet allowed to sign. The date used, or the reference list, needs explaining. The issuer must resolve the flagged conditions before the record is used.

@@ -1,0 +1,12 @@
+{
+  "context": "registry_entry",
+  "description": "Synthetic PASS: integrity, required claims, required evidence and freshness all hold.",
+  "reason_codes": [
+    "INTEGRITY_OK",
+    "REQUIRED_CLAIMS_PRESENT",
+    "REQUIRED_EVIDENCE_PRESENT",
+    "FRESHNESS_OK"
+  ],
+  "scenario_id": "registry_05_synthetic_clean_pass",
+  "verdict": "PASS"
+}

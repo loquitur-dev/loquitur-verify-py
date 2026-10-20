@@ -1,0 +1,10 @@
+{
+  "context": "registry_entry",
+  "description": "Synthetic REVIEW: two documents of the bundle make conflicting claims.",
+  "reason_codes": [
+    "INTEGRITY_OK",
+    "CONFLICTING_EVIDENCE_DETECTED"
+  ],
+  "scenario_id": "registry_07_synthetic_conflict_review",
+  "verdict": "REVIEW"
+}

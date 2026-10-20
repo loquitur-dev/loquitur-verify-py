@@ -1,0 +1,457 @@
+{
+  "schema_version": "loquitur.public_api_parity.v1",
+  "description": "The public APIs of the two reference verifiers, loquitur-verify-py and loquitur-verify-ts, side by side: every export, every member of a result an export returns and every report member that carries a verdict, a status, an authorization, a signature, a root or a trust result, with its counterpart in the other verifier or none and the reason. The same file is tools/public_api_parity.json in loquitur-verify-py and scripts/public-api-parity.json in loquitur-verify-ts; each repository's tests hold it to that repository's exports, and to the sibling's copy when the sibling is checked out. The differential harness of loquitur-conformance (tools/differential) calls the operations named in ops through each verifier's test-only adapter and compares the answers.",
+  "naming": {
+    "py": "loquitur.verify.NAME is a name of loquitur.verify.__all__; loquitur.verify.MODULE.NAME[.MEMBER] a name of a module of the package, reached by import, and MEMBER a field or property of a result class; report:PATH a member of the report verify_path returns, as to_dict writes it",
+    "ts": "NAME is a name src/index.ts or src/index.browser.ts exports, a value or a type; TYPE.MEMBER[.MEMBER] a member of an exported type, and VerifyReport.checks.NAME a per-check result a run writes; internal:FILE#NAME a function a module of src/ exports and neither entry does"
+  },
+  "carrier_pattern": "(^|_)(verdict|status|ok|verified|valid|holds|failed|established|reason|reasons|category|signature|registry_link|trust_registry)$",
+  "pairs": [
+    {
+      "id": "trust_registry_evaluation",
+      "carries": ["authorization", "signature", "root", "trust"],
+      "py": ["loquitur.verify.verify_registry_entry_trust", "loquitur.verify.trust_registry.TrustRegistryVerificationResult", "loquitur.verify.runner.OfflineVerificationReport.trust_registry"],
+      "ts": ["evaluateTrustRegistry", "TrustRegistryReport"],
+      "ops": ["trust_registry"]
+    },
+    {
+      "id": "trust_registry_statuses",
+      "carries": ["authorization", "signature", "root", "status"],
+      "py": [
+        "loquitur.verify.trust_registry.TrustRegistryVerificationResult.authorization_status",
+        "loquitur.verify.trust_registry.TrustRegistryVerificationResult.signature_status",
+        "loquitur.verify.trust_registry.TrustRegistryVerificationResult.root_signature_status",
+        "report:trust_registry.authorization_status",
+        "report:trust_registry.signature_status",
+        "report:trust_registry.trust_registry_root_signature_status"
+      ],
+      "ts": [
+        "TrustRegistryReport.authorization_status",
+        "TrustRegistryReport.signature_status",
+        "TrustRegistryReport.trust_registry_root_signature_status"
+      ],
+      "ops": ["trust_registry", "verify"]
+    },
+    {
+      "id": "trust_registry_verdict",
+      "carries": ["verdict", "status", "trust"],
+      "py": [
+        "loquitur.verify.trust_registry.TrustRegistryVerificationResult.verdict",
+        "loquitur.verify.trust_registry.TrustRegistryVerificationResult.offline_status",
+        "loquitur.verify.trust_registry.TrustRegistryVerificationResult.trust_registry_verified",
+        "loquitur.verify.trust_registry.TrustRegistryVerificationResult.failed",
+        "loquitur.verify.trust_registry.TrustRegistryVerificationResult.root_failed",
+        "loquitur.verify.trust_registry.TrustRegistryVerificationResult.review_reason",
+        "report:trust_registry.verdict",
+        "report:trust_registry.status",
+        "report:trust_registry.trust_registry_verified",
+        "report:registry.status"
+      ],
+      "ts": ["internal:src/verify-core.ts#trustRegistryVerdict"],
+      "ts_reason": "TrustRegistryReport carries the three statuses of report-contract.md section 5.4 and no verdict. The verdict of an evaluation is trustRegistryVerdict, which the bundle run's headline reads and the differential adapter calls; it is not exported from the package entries.",
+      "ops": ["trust_registry"]
+    },
+    {
+      "id": "authorization_holds",
+      "carries": ["authorization"],
+      "py": [
+        "loquitur.verify.trust_registry.TrustRegistryVerificationResult.authorization_holds",
+        "report:checks.trust_registry"
+      ],
+      "ts": ["VerifyReport.checks.trust_registry"],
+      "note": "Authorization alone (trust-registry-authorization.md section 9), never the verdict: neither the result nor the report's trust_registry section has an ok, and checks.trust_registry keeps this meaning.",
+      "ops": ["verify"]
+    },
+    {
+      "id": "trust_entry_status",
+      "carries": ["status"],
+      "py": [
+        "loquitur.verify.trust_registry.TrustRegistryVerificationResult.trust_entry_status",
+        "report:trust_registry.trust_entry_status"
+      ],
+      "ts": [],
+      "ts_reason": "evaluateTrustRegistry reports no trust-entry status: the key's status decides rows 7 and 8 of trust-registry-authorization.md section 6, which authorization_status reports (ISSUER_KEY_REVOKED, ISSUER_KEY_SUSPENDED).",
+      "ops": []
+    },
+    {
+      "id": "entry_signature",
+      "carries": ["signature"],
+      "py": [
+        "loquitur.verify.trust_registry._verify_signature",
+        "loquitur.verify.trust_registry.TrustRegistryVerificationResult.signature_valid",
+        "report:trust_registry.signature_verified",
+        "report:checks.registry_signature"
+      ],
+      "ts": [
+        "verifyRegistryEntrySignature",
+        "SignatureVerificationResult",
+        "SignatureVerificationResult.valid",
+        "SignatureVerificationResult.status",
+        "SignatureStatus",
+        "VerifyReport.checks.registry_signature"
+      ],
+      "note": "The Python package exports no signature primitive: the signature step is reached through verify_registry_entry_trust, and the differential calls the function that step runs.",
+      "ops": ["signature", "trust_registry", "verify"]
+    },
+    {
+      "id": "ecdsa",
+      "carries": ["signature"],
+      "py": ["loquitur.verify.secp256k1.verify_digest"],
+      "ts": ["verifySecp256k1Sha256Digest"],
+      "ops": ["ecdsa"]
+    },
+    {
+      "id": "root_authentication",
+      "carries": ["root", "trust"],
+      "py": [
+        "loquitur.verify.trust_root.verify_trust_registry_root_signature",
+        "loquitur.verify.trust_registry.TrustRegistryVerificationResult.root_signature_verified",
+        "report:trust_registry.trust_registry_root_signature_verified"
+      ],
+      "ts": ["authenticateTrustRegistry", "RootSignatureStatus"],
+      "ops": ["root_signature", "trust_registry"]
+    },
+    {
+      "id": "trust_roots",
+      "carries": ["root", "status"],
+      "py": [
+        "loquitur.verify.trust_root.parse_trust_roots",
+        "loquitur.verify.trust_root.trust_root_document_unsupported_version",
+        "loquitur.verify.trust_root.TrustRootKey.status",
+        "loquitur.verify.TrustRootError"
+      ],
+      "ts": ["parseTrustRoots", "TrustRoot", "TrustRoot.status", "TrustRootError"],
+      "ops": ["trust_roots", "trust_registry"]
+    },
+    {
+      "id": "registry_link",
+      "carries": ["verdict", "status"],
+      "py": [
+        "loquitur.verify.verify_registry_link",
+        "loquitur.verify.registry_link.RegistryLinkVerificationResult.link_holds",
+        "loquitur.verify.registry_link.RegistryLinkVerificationResult.status",
+        "loquitur.verify.registry_link.RegistryLinkVerificationResult.verdict",
+        "report:registry_link.ok",
+        "report:registry_link.status",
+        "report:registry_link.verdict",
+        "loquitur.verify.runner.OfflineVerificationReport.registry_link",
+        "report:checks.registry_link"
+      ],
+      "ts": ["VerifyReport.checks.registry_link"],
+      "ts_reason": "The TypeScript package exports no link function: the link check runs inside verifyBundle and verifyBundleFiles, and its result is checks.registry_link and the link entry of checks_established.",
+      "ops": ["verify"]
+    },
+    {
+      "id": "link_section_restatements",
+      "carries": ["verdict", "signature", "trust"],
+      "py": [
+        "report:registry_link.registry_entry_verdict",
+        "report:registry_link.signature_verified",
+        "report:registry_link.trust_registry_verified"
+      ],
+      "ts": [],
+      "ts_reason": "Informative members of the Python report alone (report-contract.md section 7). The link section restates the link check, so signature_verified and trust_registry_verified are false on every run; registry_entry_verdict is the entry's committed verdict, which both reports act on through registry_entry_verdict_fail and registry_entry_verdict_requires_review.",
+      "ops": []
+    },
+    {
+      "id": "headline",
+      "carries": ["verdict", "status", "authorization", "trust"],
+      "py": [
+        "loquitur.verify.verify_path",
+        "loquitur.verify.runner.OfflineVerificationReport.status",
+        "loquitur.verify.runner.OfflineVerificationReport.verdict",
+        "loquitur.verify.runner.OfflineVerificationReport.checks_established",
+        "loquitur.verify.runner.OfflineVerificationReport.review_reasons",
+        "report:status",
+        "report:verdict",
+        "report:outcome.reason",
+        "report:checks_established",
+        "report:review_reasons"
+      ],
+      "ts": [
+        "verifyBundle",
+        "verifyBundleFiles",
+        "VerifyReport",
+        "VerifyReport.status",
+        "VerifyReport.verdict",
+        "VerifyReport.outcome.reason",
+        "VerifyReport.checks_established",
+        "VerifyReport.review_reasons"
+      ],
+      "note": "verify_path is the library call of the Python command line (loquitur.verify.verify_path, defined in loquitur.verify.runner); the cross-repository gate of loquitur-conformance compares the two over every corpus run.",
+      "ops": ["verify"]
+    },
+    {
+      "id": "report_vocabularies",
+      "carries": ["verdict", "status"],
+      "py": [
+        "loquitur.verify.exit_code_for_status",
+        "loquitur.verify.runner.STATUS_OFFLINE_OK",
+        "loquitur.verify.runner.STATUS_OFFLINE_REVIEW",
+        "loquitur.verify.runner.STATUS_OFFLINE_FAIL",
+        "loquitur.verify.runner.STATUS_UNSUPPORTED_VERSION",
+        "loquitur.verify.runner.STATUS_HOST_FAILURE",
+        "loquitur.verify.runner.VERDICT_PASS",
+        "loquitur.verify.runner.VERDICT_REVIEW",
+        "loquitur.verify.runner.VERDICT_FAIL",
+        "loquitur.verify.runner.EXIT_OFFLINE_OK",
+        "loquitur.verify.runner.EXIT_OFFLINE_FAIL",
+        "loquitur.verify.runner.EXIT_OFFLINE_REVIEW",
+        "loquitur.verify.runner.EXIT_INTERNAL_ERROR",
+        "loquitur.verify.runner.EXIT_UNSUPPORTED_VERSION",
+        "loquitur.verify.runner.EXIT_HOST_FAILURE",
+        "loquitur.verify.runner.CHECK_NAMES",
+        "loquitur.verify.runner.REVIEW_REASONS"
+      ],
+      "ts": [
+        "STATUS_OFFLINE_OK",
+        "STATUS_OFFLINE_REVIEW",
+        "STATUS_OFFLINE_FAIL",
+        "STATUS_UNSUPPORTED_VERSION",
+        "STATUS_HOST_FAILURE",
+        "EXIT_OFFLINE_OK",
+        "EXIT_OFFLINE_FAIL",
+        "EXIT_OFFLINE_REVIEW",
+        "EXIT_INTERNAL_ERROR",
+        "EXIT_UNSUPPORTED_VERSION",
+        "EXIT_HOST_FAILURE",
+        "CHECK_NAMES",
+        "REVIEW_REASONS",
+        "ReportStatus",
+        "ReportVerdict",
+        "CheckName",
+        "ReviewReason"
+      ],
+      "note": "The closed sets of report-contract.md sections 3.1 to 3.3 and the exit codes of section 4. The TypeScript package has no exit_code_for_status: a report carries its exit_code, and EXIT_* name the values. The verdict values are the members of ReportVerdict (PASS, REVIEW, FAIL). The Python constants STATUS_INTERNAL_ERROR and EXIT_USAGE_ERROR belong to the command line alone and are not paired.",
+      "ops": []
+    },
+    {
+      "id": "authorization_statuses",
+      "carries": ["authorization", "status"],
+      "py": [
+        "loquitur.verify.trust_registry.AUTH_STATUS_VALID",
+        "loquitur.verify.trust_registry.AUTH_STATUS_INVALID_REGISTRY_ENTRY",
+        "loquitur.verify.trust_registry.AUTH_STATUS_INVALID_TRUST_REGISTRY",
+        "loquitur.verify.trust_registry.AUTH_STATUS_ISSUER_NOT_FOUND",
+        "loquitur.verify.trust_registry.AUTH_STATUS_KEY_NOT_FOUND",
+        "loquitur.verify.trust_registry.AUTH_STATUS_AMBIGUOUS_KEY",
+        "loquitur.verify.trust_registry.AUTH_STATUS_REVOKED",
+        "loquitur.verify.trust_registry.AUTH_STATUS_SUSPENDED",
+        "loquitur.verify.trust_registry.AUTH_STATUS_TRUST_REGISTRY_NOT_YET_EFFECTIVE",
+        "loquitur.verify.trust_registry.AUTH_STATUS_TRUST_REGISTRY_EXPIRED",
+        "loquitur.verify.trust_registry.AUTH_STATUS_NOT_YET_EFFECTIVE",
+        "loquitur.verify.trust_registry.AUTH_STATUS_EXPIRED",
+        "loquitur.verify.trust_registry.AUTH_STATUS_SCOPE_MISMATCH"
+      ],
+      "ts": ["AUTHORIZATION_STATUSES", "AuthorizationStatus"],
+      "note": "The closed authorization vocabulary of trust-registry-authorization.md section 8: one constant per status in Python, one list and its union type in TypeScript, in the same thirteen values.",
+      "ops": []
+    },
+    {
+      "id": "unverified_capabilities",
+      "carries": ["verdict", "trust"],
+      "py": [
+        "report:registry_link.registry_inclusion_verified",
+        "report:registry_link.anchor_finality_verified",
+        "report:trust_registry.registry_inclusion_verified",
+        "report:trust_registry.anchor_finality_verified"
+      ],
+      "ts": [],
+      "ts_reason": "Informative members of the Python report alone, false on every run: neither verifier verifies registry inclusion or anchor finality (report-contract.md section 2, outcome.not_implemented_capabilities).",
+      "ops": []
+    },
+    {
+      "id": "outcome_category",
+      "carries": ["status"],
+      "py": ["report:outcome.category"],
+      "ts": [],
+      "ts_reason": "Informative; the TypeScript report carries outcome.reason alone.",
+      "ops": []
+    },
+    {
+      "id": "integrity_section_restatements",
+      "carries": ["verdict", "status"],
+      "py": [
+        "report:manifest.ok",
+        "report:manifest.manifest_sha256_ok",
+        "report:manifest.files_ok",
+        "report:p1.ok",
+        "report:p1.status",
+        "report:p1.verdict",
+        "report:p1.p1_sha256_ok",
+        "report:p1.input_hash_ok",
+        "report:envelope.ok",
+        "report:envelope.status",
+        "report:envelope.verdict",
+        "report:envelope.envelope_sha256_ok",
+        "report:envelope.bundle_id_ok",
+        "report:envelope.manifest_link_ok",
+        "report:envelope.p1_link_ok",
+        "report:envelope.links_ok"
+      ],
+      "ts": [],
+      "ts_reason": "Informative sections of the Python report alone (report-contract.md section 7), restating the integrity layers. Both reports carry the per-check results checks.manifest_sha256 to checks.envelope_links, which the cross-repository gate compares.",
+      "ops": []
+    },
+    {
+      "id": "summary_rules",
+      "carries": ["verdict"],
+      "py": ["loquitur.verify.verdict_grounds.summary_violated_rules"],
+      "ts": ["summaryViolatedRules", "SummaryRule"],
+      "ops": ["summary_rules"]
+    },
+    {
+      "id": "contracts",
+      "carries": ["status"],
+      "py": [
+        "loquitur.verify.registry_link.registry_entry_contract_violations",
+        "loquitur.verify.trust_registry._trust_registry_shape_errors"
+      ],
+      "ts": ["parseRegistryEntry", "parseTrustRegistry", "ProtocolParseResult", "ProtocolParseResult.ok"],
+      "ops": ["parse"]
+    },
+    {
+      "id": "strict_loader",
+      "carries": ["status"],
+      "py": ["loquitur.verify.canonical.loads_json_bytes", "loquitur.verify.canonical.JsonLoadError"],
+      "ts": ["parseJsonStrict", "assertNoDuplicateJsonKeys", "JsonParseError"],
+      "ops": ["load", "jcs"]
+    },
+    {
+      "id": "canonicalizer",
+      "carries": ["signature"],
+      "py": [
+        "loquitur.verify.canonical.canonical_json_bytes",
+        "loquitur.verify.canonical.canonical_json_sha256",
+        "loquitur.verify.canonical.CanonicalizationError"
+      ],
+      "ts": ["canonicalJsonBytes", "canonicalHash", "sha256Uri", "CanonicalizationError"],
+      "ops": ["jcs"]
+    },
+    {
+      "id": "signing_messages",
+      "carries": ["signature", "root"],
+      "py": [
+        "loquitur.verify.signing_envelope.signing_payload",
+        "loquitur.verify.signing_envelope.signing_envelope",
+        "loquitur.verify.signing_envelope.signing_message_bytes",
+        "loquitur.verify.signing_envelope.signing_message_hash",
+        "loquitur.verify.trust_root.trust_registry_signing_bytes"
+      ],
+      "ts": [
+        "registryEntrySigningPayload",
+        "registryEntrySigningEnvelope",
+        "registryEntrySigningMessageBytes",
+        "registryEntrySigningPayloadDigest",
+        "registryEntrySigningPayloadHash",
+        "trustRegistryRootSigningEnvelope",
+        "trustRegistrySigningMessageBytes"
+      ],
+      "ops": ["signing_message"]
+    },
+    {
+      "id": "capability",
+      "carries": ["signature"],
+      "py": [
+        "loquitur.verify.cryptographic_capabilities.signature_algorithm_supported",
+        "loquitur.verify.cryptographic_capabilities.trust_key_type_supported",
+        "loquitur.verify.cryptographic_capabilities.signature_pair_supported"
+      ],
+      "ts": ["signatureAlgorithmSupported", "trustKeyTypeSupported"],
+      "ops": ["capability"]
+    },
+    {
+      "id": "evaluation_time",
+      "carries": ["trust"],
+      "py": ["loquitur.verify.evaluation_time.operator_evaluation_time", "loquitur.verify.EvaluationTimeError"],
+      "ts": ["EvaluationTimeError", "EvaluationTime"],
+      "ops": ["instant"]
+    },
+    {
+      "id": "narrative",
+      "carries": ["verdict"],
+      "py": [
+        "loquitur.verify.VerdictNarrative",
+        "loquitur.verify.render_verdict_narrative",
+        "loquitur.verify.infer_active_reason_codes"
+      ],
+      "ts": [],
+      "ts_reason": "The TypeScript package renders no narrative. The narrative restates a report's verdict and reason codes for a reader and decides nothing.",
+      "ops": []
+    }
+  ],
+  "py_not_carrying": {
+    "names": [
+      "loquitur.verify.__version__",
+      "loquitur.verify.trust_registry.TrustRegistryVerificationResult.trust_registry",
+      "loquitur.verify.OfflineVerificationReport",
+      "loquitur.verify.LoquiturVerifyError",
+      "loquitur.verify.read_trust_root_document",
+      "loquitur.verify.DOCUMENT_READ_FAILED"
+    ],
+    "reason": "The package version, and the trust registry the result was evaluated against, the document as read: an input, not a result. The class verify_path returns, whose members the report entries above list; the base of the package's own errors; and the reader of a trust-root document and the marker a host passes when that read fails, which move a document in and carry no result (the TypeScript counterparts, readDocumentPath and DOCUMENT_READ_FAILED, are listed in ts_not_carrying)."
+  },
+  "ts_not_carrying": {
+    "names": [
+      "BundleReadError",
+      "BundleReader",
+      "CRYPTOGRAPHIC_CAPABILITY_PROFILE",
+      "ChangeSummary",
+      "CoverageSummary",
+      "DOCUMENT_NOT_STRICT_JSON",
+      "DOCUMENT_PATH_NAMES_NOTHING",
+      "DOCUMENT_PATH_NAMES_NO_REGULAR_FILE",
+      "DOCUMENT_READ_FAILED",
+      "ERROR_CODES",
+      "ErrorCode",
+      "LOQUITUR_VERIFY_STATUS",
+      "LineageSummary",
+      "LoquiturCanonicalObject",
+      "LoquiturJsonObject",
+      "LoquiturRegistryObject",
+      "LoquiturVerifyStatus",
+      "REGISTERED_VOCABULARIES",
+      "REGISTERED_VOCABULARY_SHA256",
+      "RESERVED_UNSUPPORTED_ALGORITHMS",
+      "ROOT_SIGNING_DOMAIN_PREFIX",
+      "RegistryEntry",
+      "RegistryEntryWire",
+      "RegistrySignature",
+      "RegistrySignatureV2",
+      "RegistryVerdict",
+      "SIGNATURE_ALGORITHM",
+      "SIGNING_DOMAIN_PREFIX",
+      "SIGNING_ENVELOPE_DOMAIN",
+      "SIGNING_ENVELOPE_SCHEMA",
+      "SIGNING_PAYLOAD_ID",
+      "SIGNING_PAYLOAD_SCHEMA",
+      "SIGNING_PAYLOAD_VERSION",
+      "SUPPORTED_SIGNATURE_ALGORITHMS",
+      "SUPPORTED_TRUST_KEY_TYPES",
+      "SignatureVerificationOptions",
+      "SupportedSignatureAlgorithm",
+      "SupportedTrustKeyType",
+      "TrustRegistry",
+      "TrustRegistryEntryWire",
+      "TrustRegistrySignatureWire",
+      "TrustRegistryWire",
+      "UntrustedRegistryEntryInput",
+      "UntrustedTrustRegistryInput",
+      "VOCABULARY_KINDS",
+      "ValidatedRegistryEntry",
+      "ValidatedTrustRegistry",
+      "VerificationReceipt",
+      "VerificationStatus",
+      "VerificationSummary",
+      "VerifyError",
+      "VerifyOptions",
+      "VocabularyError",
+      "VocabularyKind",
+      "VocabularyRecord",
+      "VocabularySource",
+      "bundleReaderFromMap",
+      "readDocumentPath"
+    ],
+    "reason": "Constants, error classes, document readers, options, the package's status record, and the wire types of the documents a caller supplies (inputs, generated from loquitur-schemas where the name is a schema's): none is a result of verification."
+  }
+}

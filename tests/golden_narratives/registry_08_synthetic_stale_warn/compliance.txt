@@ -1,0 +1,7 @@
+The registry entry records a WARN verdict. The underlying bundle passed offline verification and at least one non-blocking condition was recorded at issuance time, which must be read and documented before downstream reliance.
+
+Bundle integrity is intact and the receipt may be cited. The cryptographic linkage between the receipt and its supporting evidence is intact. The receipt can be cited as a faithful representation of the evidence the issuer attested to. This is a precondition for relying on the verdict, not a verdict on the underlying valuation. No action required at the integrity layer. Continue with the remaining verdict review (coverage, freshness, conflict, materiality).
+
+Evidence is stale and the receipt's evidentiary basis is weakened. Stale evidence cannot fully support a current valuation receipt. The receipt may be technically valid but its evidentiary basis is dated. Acting on this receipt for current settlement, listing, or NAV reporting carries elevated risk that should be documented or escalated. Require the issuer to refresh the stale evidence and regenerate the bundle. If this is not feasible immediately, document the staleness explicitly in any downstream consumption.
+
+Document the offline verification outcome and the recorded warnings in the audit trail. The warnings do not block policy-layer evaluation, but they must be visible to it and to any downstream reviewer.

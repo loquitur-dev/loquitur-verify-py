@@ -1,0 +1,10 @@
+{
+  "context": "registry_entry",
+  "description": "Synthetic WARN: the evidence is older than the policy freshness threshold.",
+  "reason_codes": [
+    "INTEGRITY_OK",
+    "MARK_STALE"
+  ],
+  "scenario_id": "registry_08_synthetic_stale_warn",
+  "verdict": "WARN"
+}

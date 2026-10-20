@@ -1,0 +1,147 @@
+[build-system]
+requires = ["setuptools==84.0.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "loquitur-verify"
+version = "0.1.0"
+description = "Offline verifier for Loquitur evidence bundles: structure, integrity, registry link and issuer authorization, with no network (preview)."
+readme = "README.md"
+requires-python = ">=3.11"
+license = "MIT OR Apache-2.0"
+license-files = ["LICENSE-APACHE", "LICENSE-MIT", "NOTICE"]
+authors = [
+  {name = "Andrea Venè"}
+]
+keywords = ["loquitur", "rwa", "verification", "offline-verifier", "protocol"]
+classifiers = [
+  "Development Status :: 3 - Alpha",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Programming Language :: Python :: 3.13",
+  "Programming Language :: Python :: 3.14",
+  "Typing :: Typed",
+]
+dependencies = [
+  # The secp256k1 signature check of the authorization step runs through it. >=48.0.1 is a
+  # SECURITY floor, as loquitur-schemas and loquitur-protocol pin it: wheels before it
+  # statically link an OpenSSL affected by GHSA-537c-gmf6-5ccf.
+  "cryptography>=48.0.1,<51",
+  "rfc8785>=0.1.4,<0.2",
+]
+
+[project.scripts]
+loquitur-verify = "loquitur.verify.cli:main"
+
+[project.urls]
+# These are locators, unlike the `$id` values inside the schemas, which are identifiers
+# that need not resolve. PyPI renders each of these as a clickable link on the project
+# page, so a dead one is a broken promise on the first screen a reviewer sees.
+# Identifiers live under `loquitur.dev`: protocol data schemas on `schemas.loquitur.dev`,
+# governance schemas on `governance.loquitur.dev`. The project URLs below name the
+# `loquitur-dev` GitHub organization.
+# The GitHub owner appears four times below and nowhere else in this file. It is called out
+# here because these four URLs are copied verbatim into the PyPI package metadata at upload,
+# and PyPI does not allow a released version's metadata to be edited afterwards: a wrong
+# owner here is wrong for the life of that release.
+Homepage = "https://github.com/loquitur-dev/loquitur-verify-py"
+Repository = "https://github.com/loquitur-dev/loquitur-verify-py"
+Documentation = "https://github.com/loquitur-dev/loquitur-verify-py#readme"
+Issues = "https://github.com/loquitur-dev/loquitur-verify-py/issues"
+
+[project.optional-dependencies]
+# Optional narrative rendering and verifier development consume the public schemas package.
+# Install loquitur-schemas first, then install, build or test loquitur-verify with it.
+narrative = [
+  "loquitur-schemas>=0.1.0,<0.2.0",
+]
+# Tooling only. loquitur-schemas belongs to the `narrative` extra above, not here: it is
+# an optional FEATURE dependency, and putting it in `dev` would make a plain `pip install -e
+# ".[dev]"` depend on loquitur-schemas being installable from an index.
+dev = [
+  "build>=1.2",
+  "coverage>=7.0",
+  # Also a runtime dependency (above); named here too because tests/test_trust_root_flag.py
+  # mints secp256k1 keys with it to sign fixture trust registries, the only executable proof
+  # that --trust-root refuses a registry a pinned root did not sign. The range is the runtime
+  # one: a dependency range is one of the things a package index freezes for the life of a
+  # release, and no extra may resolve a version the other Loquitur packages treat as vulnerable.
+  "cryptography>=48.0.1,<51",
+  # Dev-only: the property tests (tests/test_properties_*.py). Pinned exactly so that the
+  # derandomized examples they draw are the same on every machine and in CI.
+  "hypothesis==6.167.0",
+  "pytest>=8,<10",
+  # Dev-only: tests/test_release_workflow.py reads the release workflow as YAML.
+  "pyyaml>=6.0.2,<7",
+]
+
+[tool.setuptools]
+include-package-data = true
+
+[tool.setuptools.packages.find]
+where = ["src"]
+include = ["loquitur", "loquitur.*"]
+namespaces = true
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["src"]
+addopts = "-ra --strict-config --strict-markers"
+
+[tool.mypy]
+# The package ships py.typed and declares `Typing :: Typed`, so it type-checks under the
+# strictest settings a consumer may run. CI runs `mypy` with this configuration.
+packages = ["loquitur.verify"]
+mypy_path = "src"
+strict = true
+
+[[tool.mypy.overrides]]
+# The optional [narrative] extra. Where it is installed and where it is not, the verifier
+# sees the catalog as untyped, so the check gives the same answer in both environments.
+module = ["loquitur.schemas", "loquitur.schemas.*"]
+ignore_missing_imports = true
+follow_imports = "skip"
+
+[tool.ruff]
+line-length = 120
+target-version = "py311"
+
+[tool.ruff.format]
+# schema_contract.py is emitted by tools/generate_schema_contract.py and says so in its
+# own header. The formatter would rewrite it, the next regeneration would undo that, and
+# test_schema_contract_is_current.py compares the file against freshly generated content,
+# so a formatted copy turns a passing guard red. The generator owns its output.
+# registered_vocabularies.py is emitted by tools/generate_registered_vocabularies.py for the same
+# reason and under the same guard, test_registered_vocabularies_is_current.py.
+exclude = ["src/loquitur/verify/schema_contract.py", "src/loquitur/verify/registered_vocabularies.py"]
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "B", "UP"]
+
+[tool.coverage.run]
+branch=true
+source = ["loquitur.verify"]
+
+[tool.coverage.report]
+fail_under = 85
+show_missing = true
+skip_covered = false
+exclude_also = [
+  "if __name__ == .__main__:",
+  "raise SystemExit\\(main\\(\\)\\)",
+]
+
+[tool.setuptools.package-data]
+"loquitur.verify" = ["py.typed"]
+
+[tool.ruff.lint.per-file-ignores]
+# Tests may keep long fixture strings, import after a module docstring/sys.path shim,
+# and assert broad exceptions for frozen-dataclass immutability probes.
+"tests/**" = ["E501", "E402", "B017"]
+# schema_contract.py is generated by tools/generate_schema_contract.py and says so in
+# its own header. Its long lines are pprint output of the mirrored JSON Schemas.
+# Reflowing them by hand would be undone by the next regeneration, and
+# tests/test_schema_contract_is_current.py compares this file against freshly generated
+# content, so a hand-formatted version would turn a passing guard red.
+"src/loquitur/verify/schema_contract.py" = ["E501"]

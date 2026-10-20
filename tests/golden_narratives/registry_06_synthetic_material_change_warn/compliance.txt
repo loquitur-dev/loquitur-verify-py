@@ -1,0 +1,9 @@
+The registry entry records a WARN verdict. The underlying bundle passed offline verification and at least one non-blocking condition was recorded at issuance time, which must be read and documented before downstream reliance.
+
+Bundle integrity is intact and the receipt may be cited. The cryptographic linkage between the receipt and its supporting evidence is intact. The receipt can be cited as a faithful representation of the evidence the issuer attested to. This is a precondition for relying on the verdict, not a verdict on the underlying valuation. No action required at the integrity layer. Continue with the remaining verdict review (coverage, freshness, conflict, materiality).
+
+The bundle covers every claim the policy requires. Required claim coverage is met. This does not mean the claims are correct; it means none are missing. Document-backing, freshness, and conflict status are evaluated separately. No action required at the coverage layer. Continue with downstream verdict review.
+
+A material change in claim values is recorded. The receipt records a change above the policy materiality threshold. This is informational, not a failure; the change is part of the audit trail. Downstream consumers (NAV reporting, LP communication, listing publication) must surface this change; suppressing it would be a misstatement. Ensure the material change is reflected in downstream reporting consistent with policy. No bundle-level action required.
+
+Document the offline verification outcome and the recorded warnings in the audit trail. The warnings do not block policy-layer evaluation, but they must be visible to it and to any downstream reviewer.

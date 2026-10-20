@@ -1,0 +1,12 @@
+{
+  "context": "registry_entry",
+  "description": "Synthetic REVIEW with several codes: a conflict, stale evidence and a material change in one bundle.",
+  "reason_codes": [
+    "INTEGRITY_OK",
+    "CONFLICTING_EVIDENCE_DETECTED",
+    "MARK_STALE",
+    "MATERIAL_CHANGE_DETECTED"
+  ],
+  "scenario_id": "registry_09_synthetic_multi_code_review",
+  "verdict": "REVIEW"
+}

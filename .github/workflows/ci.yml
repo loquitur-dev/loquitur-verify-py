@@ -1,0 +1,497 @@
+name: ci
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+  # The release workflow runs these same checks on the tagged commit before it builds anything.
+  workflow_call:
+
+# One run per branch and event. Without this, a quick sequence of pushes leaves several runs
+# racing for the same answer and the last to finish wins, which is not necessarily the last
+# commit. Called by the release workflow, github.workflow and github.ref are the caller's, so the
+# group starts with `ci-` and names the event: it is never the caller's own group.
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}-${{ github.event_name }}
+  cancel-in-progress: true
+
+# Least privilege. Without this the workflow runs with whatever the repository
+# default grants, which is often write: an unnecessary standing capability for a job
+# that only reads the tree and runs tests.
+permissions:
+  contents: read
+
+jobs:
+  test-base:
+    # Base install: NO optional [narrative] extra. Proves the verifier is
+    # usable and green without loquitur-schemas; narrative tests are skipped
+    # by tests/conftest.py. This is the always-on isolation gate.
+    runs-on: ubuntu-24.04
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.11", "3.12", "3.13", "3.14"]
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
+        with:
+          python-version: ${{ matrix.python-version }}
+      - run: |
+          python -m pip install pip==26.2.1
+          pip install -e ".[dev]"
+      - name: Print the resolved dependency versions
+        # A range admits more than one version: the log says which one this run tested.
+        run: python -m pip list --format=freeze | grep -i -E "^(cryptography|rfc8785|pytest|cffi|pycparser)=="
+      - name: Lint (ruff)
+        run: |
+          # Pinned: an unpinned linter means the gate's definition changes under you, and a newer
+          # ruff can turn the lint red on unchanged code. pyproject.toml selects the rules itself
+          # ("I" included), so the pin is about version drift, not defaults.
+          python -m pip install ruff==0.15.12
+          ruff check src tests
+          ruff format --check src tests
+      - name: Type check (mypy --strict, configured in pyproject.toml)
+        run: |
+          # Pinned for the reason the linter above is: a new release adds checks to --strict.
+          # This job installs no loquitur-schemas; pyproject.toml makes mypy read it as untyped
+          # wherever it is installed, so the answer is the same in every environment.
+          python -m pip install mypy==2.4.0
+          mypy
+      - name: Assert the suite collects every test module
+        run: |
+          # A module that fails to import is dropped from the run with a line the `-q`
+          # summary makes easy to walk past, and a whole group of modules (the narrative
+          # ones are about 40% of the suite) can drop out with nothing in the output saying
+          # so. This is the only job that gates a public contributor's PR, so a silent drop
+          # here is a green run that proved far less than it appeared to.
+          # The three modules below bind names from loquitur-schemas at import time and so
+          # cannot be collected without the optional extra; each announces itself with a
+          # SKIPPED line. Every other test module must contribute at least one collected
+          # test. Counting MODULES rather than tests is deliberate: an expected test-count
+          # floor has to be edited every time a test is added, so it gets bumped without
+          # being read, whereas this list changes only on a deliberate act.
+          python - << 'PY'
+          import pathlib
+          import subprocess
+          import sys
+
+          UNCOLLECTABLE_WITHOUT_THE_NARRATIVE_EXTRA = {
+              "test_cross_language_conformance_locks.py",
+              "test_cross_repo_canonical_equivalence.py",
+              "test_secp256k1_differential.py",
+          }
+
+          result = subprocess.run(
+              [sys.executable, "-m", "pytest", "--collect-only", "-q"],
+              capture_output=True,
+              text=True,
+              check=False,
+          )
+          collected = {
+              pathlib.PurePosixPath(line.split("::", 1)[0]).name
+              for line in result.stdout.splitlines()
+              if "::" in line
+          }
+          on_disk = {path.name for path in pathlib.Path("tests").glob("test_*.py")}
+          silent = sorted(on_disk - collected - UNCOLLECTABLE_WITHOUT_THE_NARRATIVE_EXTRA)
+          if silent:
+              print(result.stdout)
+              raise SystemExit(f"these test modules collected nothing: {silent}")
+          print(f"collection complete: {len(collected)} of {len(on_disk)} test modules")
+          PY
+      - name: Test (base, narrative skipped)
+        run: pytest -q
+      - name: The host-dependent rows run on this runner, not skip
+        # A name that is not UTF-8, two sibling names that differ only in letter case and a POSIX
+        # symbolic link can all be made on this Linux runner. The rows that read them skip, with
+        # the reason, only on a host that cannot make them, so a host-reason skip here would leave
+        # them proved on no host this workflow runs on.
+        run: |
+          set -o pipefail
+          pytest -q -rs tests/test_member_names_and_size.py tests/test_bundle_links.py \
+            tests/test_portable_member_names.py | tee host-rows.txt
+          if grep -E "^SKIPPED .*(this host|this filesystem|no non-UTF-8 names)" host-rows.txt; then
+            echo "a host-dependent row skipped on this runner"
+            exit 1
+          fi
+
+  siblings:
+    # The whole suite with the published siblings checked out beside this repository, as the
+    # tests look for them. `test-base` above has none of them and skips those tests. This job
+    # runs:
+    #   - the narrative tests, about 40% of the suite, which need loquitur-schemas installed.
+    #     A deselected narrative module would leave a green run that never rendered a
+    #     narrative, so the step below asserts they are collected;
+    #   - tests/test_spec_*.py, which read the rules of loquitur-protocol's
+    #     docs/specification from the sibling checkout and hold this verifier to them;
+    #   - the check that the verdict path attempts no network access, over the bundles of the
+    #     conformance corpus loquitur-protocol pins;
+    #   - the drift tests against loquitur-verify-ts.
+    #
+    # The job runs in a public repository: a GITHUB_TOKEN is scoped to its own repository and
+    # cannot check out a private sibling. The probe step asks, with no credentials, which of the
+    # three siblings are publicly readable, and only those are checked out. With all three,
+    # LOQUITUR_REQUIRE_SIBLINGS is set, so a test that reads a sibling fails instead of skipping
+    # when it is missing. With fewer, a test that reads an absent sibling skips and names it, and
+    # the job fails on a skip that names a sibling the probe found.
+    #
+    # The siblings are checked out at the head of their default branch, not at a tag matching
+    # this run, so a release run of a tag depends on their state when it runs. This job failing
+    # on a tag is fixed in the sibling and re-run; the tag is not moved.
+    if: ${{ !github.event.repository.private }}
+    runs-on: ubuntu-24.04
+    # Every Python the documents name, 3.11 or later, up to the newest release, as in every
+    # job of this workflow that runs Python.
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.11", "3.12", "3.13", "3.14"]
+    steps:
+      - name: Find the siblings that are publicly readable
+        id: probe
+        # Outside any checkout, so no stored credential is sent, and with prompts off, so a sibling
+        # that is not public answers "not found" at once instead of asking for a password. Any other
+        # failure (a network error, a server error) is no answer and is asked again, up to four
+        # times with a growing pause. On a tag, which release.yml runs this workflow for, a sibling
+        # still unanswered fails the job, so that a release never skips a sibling's checks for a
+        # transient failure; on any other run it is skipped with a warning.
+        working-directory: ${{ runner.temp }}
+        shell: bash
+        env:
+          GIT_TERMINAL_PROMPT: "0"
+          OWNER: ${{ github.repository_owner }}
+          REF_TYPE: ${{ github.ref_type }}
+        run: |
+          published=""
+          for repo in loquitur-protocol loquitur-schemas loquitur-verify-ts; do
+            answer=""
+            for attempt in 1 2 3 4; do
+              status=0
+              error="$(git ls-remote --exit-code "https://github.com/$OWNER/$repo.git" HEAD 2>&1 >/dev/null)" || status=$?
+              if [ "$status" -eq 0 ]; then answer=readable; break; fi
+              # Exit 2 is a repository with no HEAD; the messages are git's for a 401 with prompts
+              # off and for a 404. Each says the sibling is not publicly readable.
+              case "$status:$error" in
+                2:* | *"could not read Username"* | *"Repository not found"* | *"' not found"*) answer=unreadable; break ;;
+              esac
+              echo "probe of $repo failed (attempt $attempt of 4, exit $status): $error"
+              if [ "$attempt" -lt 4 ]; then sleep $((5 << (attempt - 1))); fi
+            done
+            case "$answer" in
+              readable) published="$published $repo" ;;
+              unreadable) ;;
+              *)
+                if [ "$REF_TYPE" = tag ]; then
+                  echo "::error::$repo could not be probed, so this run on a tag cannot tell whether its checks apply"
+                  exit 1
+                fi
+                echo "::warning::$repo could not be probed, so this run skips its checks"
+                ;;
+            esac
+          done
+          published="${published# }"
+          echo "published=$published" >> "$GITHUB_OUTPUT"
+          if [ "$published" = "loquitur-protocol loquitur-schemas loquitur-verify-ts" ]; then
+            echo "all=1" >> "$GITHUB_OUTPUT"
+          fi
+          echo "publicly readable siblings: ${published:-none}"
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with: { path: loquitur-verify-py }
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        if: contains(format(' {0} ', steps.probe.outputs.published), ' loquitur-protocol ')
+        with: { repository: "${{ github.repository_owner }}/loquitur-protocol", path: loquitur-protocol }
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        if: contains(format(' {0} ', steps.probe.outputs.published), ' loquitur-schemas ')
+        with: { repository: "${{ github.repository_owner }}/loquitur-schemas", path: loquitur-schemas }
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        if: contains(format(' {0} ', steps.probe.outputs.published), ' loquitur-verify-ts ')
+        with: { repository: "${{ github.repository_owner }}/loquitur-verify-ts", path: loquitur-verify-ts }
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
+        with: { python-version: "${{ matrix.python-version }}" }
+      - name: Install loquitur-schemas
+        if: contains(format(' {0} ', steps.probe.outputs.published), ' loquitur-schemas ')
+        run: |
+          python -m pip install pip==26.2.1
+          python -m pip install ./loquitur-schemas
+      - name: Install loquitur-verify-py
+        run: python -m pip install "./loquitur-verify-py[dev]"
+      - name: Assert the narrative and specification modules are collected, not skipped
+        if: steps.probe.outputs.all == '1'
+        working-directory: loquitur-verify-py
+        run: |
+          python - <<'PY'
+          import pathlib, subprocess, sys
+          MODULES = [
+              "test_cli_narrative.py",
+              "test_golden_narratives.py",
+              "test_narrative.py",
+              "test_narrative_authorization.py",
+              "test_narrative_compliance_executive.py",
+              "test_narrative_manifest_missing.py",
+              *sorted(path.name for path in pathlib.Path("tests").glob("test_spec_*.py")),
+          ]
+          out = subprocess.run([sys.executable, "-m", "pytest", "--collect-only", "-q"],
+                               capture_output=True, text=True, check=False).stdout
+          missing = [m for m in MODULES if f"{m}::" not in out]
+          if missing:
+              raise SystemExit(f"modules not collected: {missing}")
+          print(f"all {len(MODULES)} narrative and specification modules collected")
+          PY
+      - name: Test (every sibling required when all three are readable)
+        working-directory: loquitur-verify-py
+        shell: bash
+        env:
+          LOQUITUR_REQUIRE_SIBLINGS: ${{ steps.probe.outputs.all }}
+          PUBLISHED: ${{ steps.probe.outputs.published }}
+        run: |
+          pytest -q -rs | tee pytest.log
+          python - <<'PY'
+          import os
+          import sys
+          published = os.environ["PUBLISHED"].split()
+          skips = [line for line in open("pytest.log", encoding="utf-8") if line.startswith("SKIPPED")]
+          wrong = [line for line in skips if any(name in line for name in published)]
+          if wrong:
+              sys.exit("tests skipped naming a sibling that is checked out:\n" + "".join(wrong))
+          print(f"{len(skips)} skip line(s), none naming a sibling that is checked out")
+          PY
+
+  release-gate:
+    # This job runs the gate that docs/maintainers/build-checks.md mandates and
+    # tests/test_release_checks_0_1_0.py pins by name. The unit tests beside it stub
+    # `_run`, so they check the module's logic and never build a wheel, create an environment
+    # or verify a bundle. A gate that only ever runs by hand, on the one day it matters most,
+    # is a gate nobody has evidence for.
+    runs-on: ubuntu-24.04
+    # Every Python the documents name, 3.11 or later, up to the newest release, as in every
+    # job of this workflow that runs Python.
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.11", "3.12", "3.13", "3.14"]
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
+        with: { python-version: "${{ matrix.python-version }}" }
+      - name: Build, install into a clean environment, smoke every check
+        run: |
+          python -m pip install pip==26.2.1 build==1.6.1
+          python tools/local_wheel_gate.py
+      - name: The published sdist must pass its own tests
+        run: |
+          rm -rf build dist src/*.egg-info
+          python -m build
+          python tools/local_wheel_gate.py --check-dist dist
+
+  no-secret-in-dist:
+    # No private key material may reach a wheel or sdist built from this repository. Keys the
+    # tests use are generated in memory per run and written nowhere, so nothing should ever
+    # match: the patterns below are a standing tripwire, so a key introduced by accident fails
+    # here rather than inside a built artifact. The sdist ships tests/ on purpose (MANIFEST.in),
+    # so no path rule refuses it; a file named like a key file is refused wherever it is.
+    runs-on: ubuntu-24.04
+    # Every Python the documents name, 3.11 or later, up to the newest release, as in every
+    # job of this workflow that runs Python.
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.11", "3.12", "3.13", "3.14"]
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
+        with: { python-version: "${{ matrix.python-version }}" }
+      - name: Build sdist and wheel
+        run: |
+          python -m pip install pip==26.2.1 build==1.6.1
+          python -m build
+      - name: Assert no private key material inside the artifacts
+        # Refuses to pass on nothing: with no sdist or no wheel in dist/ it fails, since a check
+        # that reports success when it inspected nothing is worse than no check. A finding names
+        # the artifact, the member and the kind of match, never the matched value.
+        run: |
+          python - dist <<'PY'
+          import re
+          import sys
+          import tarfile
+          import zipfile
+          from pathlib import Path
+
+          # Each pattern is spelled in pieces, so that this workflow holds no armour line or key literal.
+          PRIVATE = "PRIVATE"
+          PATTERNS = [
+              ("PEM private-key armour", re.compile(r"-----BEGIN [A-Z0-9 ]*" + PRIVATE + r"[ ]KEY|" + PRIVATE + r"[ ]KEY-{5}")),
+              ("literal given to a key derivation", re.compile(r"derive_private_key\(\s*(?:0x[0-9a-f]{16,}|\d{20,}|int\(\s*[\"'][0-9a-f]{32,})", re.I)),
+              ("literal assigned to a private name", re.compile(r"private[_a-z]*\s*[=:]\s*(?:0x[0-9a-f]{40,}|[\"'][0-9a-f]{64}[\"']|\d{40,})", re.I)),
+              ("private key member", re.compile(r"\"private_key(?:_hex)?\"\s*:\s*\"[0-9a-f]{64}\"", re.I)),
+              ("literal assigned to a secret key", re.compile(r"(?:secretKey|privateKey|priv)\s*[=:(]\s*(?:0x[0-9a-f]{40,}n?|[\"'`][0-9a-f]{64})", re.I)),
+          ]
+          FORBIDDEN_PATH = re.compile(r"_key\.json$")
+
+
+          def members(path: Path):
+              if path.suffix == ".whl":
+                  with zipfile.ZipFile(path) as archive:
+                      for info in archive.infolist():
+                          if not info.is_dir():
+                              yield info.filename, archive.read(info)
+              else:
+                  with tarfile.open(path, "r:gz") as archive:
+                      for info in archive.getmembers():
+                          if info.isfile():
+                              yield info.name, archive.extractfile(info).read()
+
+
+          dist = Path(sys.argv[1] if len(sys.argv) > 1 else "dist")
+          artifacts = sorted(dist.glob("*.tar.gz")) + sorted(dist.glob("*.whl"))
+          if not any(a.suffix == ".whl" for a in artifacts) or not any(a.name.endswith(".tar.gz") for a in artifacts):
+              sys.exit("expected at least one sdist and one wheel; nothing was inspected")
+          findings, count = [], 0
+          for artifact in artifacts:
+              for name, data in members(artifact):
+                  count += 1
+                  if FORBIDDEN_PATH.search(name):
+                      findings.append(f"{artifact.name}: {name}: a key file name")
+                  text = data.decode("latin-1")
+                  for label, pattern in PATTERNS:
+                      if pattern.search(text):
+                          # The place, never the value.
+                          findings.append(f"{artifact.name}: {name}: {label}")
+          if findings:
+              sys.exit("private key material in a built artifact:\n" + "\n".join(findings))
+          print(f"{len(artifacts)} artifact(s), {count} member(s): no private key material")
+          PY
+
+  import-isolation:
+    # The verdict path contains no network access and no AI. This job is where that is
+    # enforced, by tools/check_verdict_path_isolation.py: a list of named libraries to refuse
+    # would pass a copy of the verifier that imports socket and urllib.request with exit 0,
+    # so tests/import_guards.py holds the rule as an allow-list (the standard library
+    # outside its network modules, the `loquitur` namespace, the runtime dependency closure
+    # pyproject.toml declares), and the tool's docstring says what each check reads and
+    # what none of them covers. The job installs the package alone, so the closure it sees
+    # is rfc8785 and cryptography with what it requires, and what it sees loaded is what the
+    # verifier and those dependencies load.
+    runs-on: ubuntu-24.04
+    # Every Python the documents name, 3.11 or later, up to the newest release, as in every
+    # job of this workflow that runs Python.
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.11", "3.12", "3.13", "3.14"]
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
+        with:
+          python-version: ${{ matrix.python-version }}
+      - run: |
+          python -m pip install pip==26.2.1
+          pip install -e .
+      - name: Assert importing the verifier loads nothing the allow-list refuses
+        run: |
+          python - << 'PY'
+          import sys
+          sys.path.insert(0, "tests")
+          from import_guards import (
+              assert_no_new_forbidden_modules_loaded,
+              evict_preloaded_forbidden_modules,
+              snapshot_forbidden_modules,
+          )
+          # What site customization loaded at start-up (the editable-install finder of the
+          # `pip install -e .` above) is evicted from the module cache, so that an import of
+          # it by the verifier would be seen arriving instead of found already there.
+          evicted = evict_preloaded_forbidden_modules()
+          before = snapshot_forbidden_modules()
+          if before:
+              raise SystemExit(f"refused modules still loaded after eviction, nothing checked: {sorted(before)}")
+          import loquitur.verify  # noqa: F401
+          import loquitur.verify.cli  # noqa: F401
+          import loquitur.verify.runner  # noqa: F401
+          assert_no_new_forbidden_modules_loaded(before)
+          print(f"verifier import isolation OK (evicted at start-up: {sorted(evicted)}; the import loaded nothing refused)")
+          PY
+      - name: No network or AI import in any module, and no network attempt when the CLI runs
+        # Static: every module's syntax tree. Runtime: a fresh import. Offline: the CLI over
+        # the fixture bundles under every check and --trust-root with socket creation refused and an
+        # audit hook recording socket events. The bundles of the conformance corpus
+        # loquitur-protocol pins are added when that repository is checked out beside this
+        # one, as in the `siblings` job; in this job it is not.
+        run: python tools/check_verdict_path_isolation.py
+
+  dco:
+    # CONTRIBUTING mandates a Developer Certificate of Origin sign-off on every commit,
+    # and this job enforces it. Policy that no gate checks is satisfied by accident until
+    # the first commit that forgets.
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          # The sign-off lives in the commit message, so the commits themselves are what
+          # this job reads, and a shallow clone cannot answer the question.
+          fetch-depth: 0
+      - name: Every commit must carry a Signed-off-by matching its author
+        # The event's values reach the script through the environment, never pasted into its text.
+        env:
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
+          BEFORE_SHA: ${{ github.event.before }}
+          DEFAULT_BRANCH: ${{ github.event.repository.default_branch }}
+        run: |
+          set -euo pipefail
+          base="$BASE_SHA"
+          head="$HEAD_SHA"
+          before="$BEFORE_SHA"
+          default="$DEFAULT_BRANCH"
+          zero="0000000000000000000000000000000000000000"
+          if [ -n "$base" ]; then
+            range="$base..$head"
+          elif [ -n "$before" ] && [ "$before" != "$zero" ] && git cat-file -e "$before^{commit}" 2>/dev/null; then
+            range="$before..$head"
+          elif [ "$before" = "$zero" ] && [ "$GITHUB_REF" = "refs/heads/$default" ]; then
+            # The default branch itself is pushed for the first time: no earlier revision of it
+            # exists and no other branch holds its commits, so every commit it carries is new.
+            range="$head"
+          else
+            # A new branch, or a push whose earlier revision this clone does not hold: there
+            # is no earlier revision of the branch to diff against. Its new commits are the
+            # ones not already on the default branch. Every reachable commit is not the
+            # range: that is the default branch's whole history, and every new branch cut
+            # from it would be judged on commits that are not its own, while the same
+            # commits pass as the pull request's range.
+            if [ -z "$default" ]; then
+              echo "::error::the event names no default branch to diff a new branch against"
+              exit 1
+            fi
+            ref="refs/remotes/origin/$default"
+            if ! git rev-parse -q --verify "$ref^{commit}" >/dev/null; then
+              git fetch --no-tags --quiet origin "+refs/heads/$default:$ref" || true
+            fi
+            if ! git rev-parse -q --verify "$ref^{commit}" >/dev/null; then
+              echo "::error::default branch $default not found; refusing to check the whole history"
+              exit 1
+            fi
+            range="$ref..$head"
+          fi
+          echo "DCO range: $range"
+
+          commits="$(git rev-list "$range")"
+          # Never report success over an empty range. If it resolves to nothing, fall
+          # back to the tip, which always exists: a pass here must mean a commit was
+          # actually inspected.
+          if [ -z "$commits" ]; then
+            commits="$head"
+          fi
+
+          fail=0
+          count=0
+          for sha in $commits; do
+            count=$((count + 1))
+            author="$(git show -s --format='%an <%ae>' "$sha")"
+            if ! git show -s --format='%B' "$sha" | grep -qiF "Signed-off-by: $author"; then
+              echo "::error::commit $sha by $author carries no matching Signed-off-by"
+              fail=1
+            fi
+          done
+          if [ "$fail" -ne 0 ]; then
+            echo "Sign off with: git commit -s   (existing commit: git commit --amend -s)"
+            exit 1
+          fi
+          echo "DCO OK: $count commit(s) inspected, each signed off by its author"

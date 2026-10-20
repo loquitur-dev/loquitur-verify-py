@@ -1,0 +1,5 @@
+The bundle requires review. At least one operational condition blocks PASS at the offline layer and must be resolved before the receipt can be relied upon for downstream decisions.
+
+The evidence is intact, but the signer held no authority yet at the evaluation date. The bundle has not been altered and the issuer is known to the registry. The date the verification was evaluated at precedes the start of the key's authorization period. Until the evaluation date and the trust material are confirmed to fit the question being asked, nothing about the issuer's authority follows. Ensure the evaluation date and the trust registry copy used fit the question being asked. If both do, determine when the record was signed, and do not accept a re-dated record from the issuer without independent support.
+
+Do not advance the receipt to operational use until the flagged conditions are resolved. Document the review action and outcome in the audit trail before any downstream consumption.

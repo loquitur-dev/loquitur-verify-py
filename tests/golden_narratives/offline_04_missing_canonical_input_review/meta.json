@@ -1,0 +1,6 @@
+{
+  "bundle_filename": "missing_canonical_input_bundle.zip",
+  "context": "offline_verification",
+  "description": "REVIEW: canonical_input.json absent \u2014 replay incomplete.",
+  "scenario_id": "offline_04_missing_canonical_input_review"
+}

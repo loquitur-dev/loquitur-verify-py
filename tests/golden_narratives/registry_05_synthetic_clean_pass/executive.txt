@@ -1,0 +1,1 @@
+The public registry entry confirms a valid verification record. This record contains all the information the policy requires. Other quality checks are evaluated separately. All supporting documents in this record are current. No staleness concerns. All required supporting documents are attached to this record. Their content is checked separately.

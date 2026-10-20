@@ -1,0 +1,11 @@
+The registry entry records a REVIEW verdict. The receipt acknowledges that at least one verification condition was not confirmed at issuance time.
+
+Bundle integrity verification completed without errors. The manifest, P1 receipt, and envelope hashes have been recomputed and match the values declared inside the bundle. Canonical input hashing succeeded under RFC 8785 (JCS). No tampering, truncation, or canonicalization drift was detected at the bundle integrity layer.
+
+Evidence age exceeds the policy freshness threshold. At least one evidence document's effective date is older than the policy-configured freshness window. The verifier emits a warning at this layer; whether the warning escalates to REVIEW or FAIL depends on policy configuration (typically REVIEW within 2x the threshold, FAIL beyond).
+
+Two or more documents declare conflicting values for the same claim. The conflict detector identified at least one claim for which two source documents in this bundle declare different values for the same asset on the same effective date. The conflict is recorded with evidence pointers to both documents. The verdict drops to REVIEW; conflicts must be explicitly resolved before PASS.
+
+A material change was detected relative to the previous snapshot. The change_summary indicates that at least one tracked claim changed by more than the policy-configured materiality threshold relative to the immediately superseded snapshot. The change is recorded with delta_pct and absolute delta values. The verdict is not affected by materiality alone; the marker exists to ensure the change is visible to downstream consumers and not silently absorbed.
+
+The bundle is not rejected but cannot be confirmed PASS at the offline layer until the flagged checks are resolved or completed.

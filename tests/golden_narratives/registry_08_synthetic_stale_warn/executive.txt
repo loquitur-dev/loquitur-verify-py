@@ -1,0 +1,1 @@
+The public registry entry confirms a valid verification record that carries recorded warnings. Supporting documents in this record are older than policy expects. The issuer should provide updated documents. The recorded warnings do not prevent the record from being used, but they should be read alongside it.
