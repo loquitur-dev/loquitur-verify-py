@@ -186,7 +186,7 @@ jobs:
           python -m pip --python "$RUNNER_TEMP/sbom-env/bin/python" install "dist/loquitur_verify-$VERSION-py3-none-any.whl"
           python -m venv "$RUNNER_TEMP/sbom-tool"
           "$RUNNER_TEMP/sbom-tool/bin/python" -m pip install pip==26.2.1 cyclonedx-bom==7.5.0 cyclonedx-python-lib==11.12.0
-          "$RUNNER_TEMP/sbom-tool/bin/cyclonedx-py" environment --pyproject pyproject.toml --mc-type library --output-reproducible \
+          "$RUNNER_TEMP/sbom-tool/bin/cyclonedx-py" environment --pyproject pyproject.toml --mc-type library \
             --of JSON -o "dist/loquitur_verify-$VERSION.cdx.json" "$RUNNER_TEMP/sbom-env/bin/python"
       - name: Write SHA256SUMS
         working-directory: dist
